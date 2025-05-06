@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+/* Títulos / Encabezados */
+h1, h2, h3, h4 {
+    font-family: 'Bebas Neue', 'Anton', 'Oswald', sans-serif;
+    text-transform: uppercase;
+  }
+  
+  /* Texto general / Párrafos */
+  body, p, span, li {
+    font-family: 'Roboto', 'Lato', 'Open Sans', sans-serif;
+  }
+  
