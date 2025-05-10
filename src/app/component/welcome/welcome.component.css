@@ -1,0 +1,14 @@
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-image: none; /* quitamos la imagen SVG por defecto */
+  color: red; /* el color que tú quieras */
+  font-size: 2rem;
+}
+
+.carousel-control-prev-icon::after {
+  content: '‹'; /* flecha izquierda */
+}
+
+.carousel-control-next-icon::after {
+  content: '›'; /* flecha derecha */
+}
