@@ -10,3 +10,17 @@ h1, h2, h3, h4 {
     font-family: 'Roboto', 'Lato', 'Open Sans', sans-serif;
   }
   
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 67vh;
+}
+
+main {
+  flex: 1;
+}

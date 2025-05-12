@@ -1,1 +1,31 @@
-<p>contact works!</p>
+<section class="container my-5">
+  <h2 class="text-center mb-4">Contáctenos</h2>
+  <form action="https://formsubmit.co/TU_CORREO@ejemplo.com" method="POST" class="mx-auto" style="max-width: 600px;">
+    
+    <!-- Nombre -->
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input type="text" class="form-control" id="nombre" name="nombre" required placeholder="Escribe tu nombre">
+    </div>
+
+    <!-- Correo -->
+    <div class="mb-3">
+      <label for="email" class="form-label">Correo electrónico</label>
+      <input type="email" class="form-control" id="email" name="email" required placeholder="Escribe tu correo electrónico">
+    </div>
+
+    <!-- Mensaje -->
+    <div class="mb-3">
+      <label for="mensaje" class="form-label">Mensaje</label>
+      <textarea class="form-control" id="mensaje" name="mensaje" rows="5" required></textarea>
+    </div>
+
+    <!-- Botón -->
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+    </div>
+
+    <!-- Evita spam -->
+    <input type="hidden" name="_captcha" value="false">
+  </form>
+</section>
