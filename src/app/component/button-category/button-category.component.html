@@ -1,0 +1,15 @@
+<div class="dropdown">
+  <button class="btn btn-danger shadow dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Novedades
+  </button>
+  <ul class="dropdown-menu">
+     <li>
+      <a class="dropdown-item" (click)="selectCategory(0)">Todos</a>
+    </li>
+    <li *ngFor="let category of categories">
+      <a class="dropdown-item" (click)="selectCategory(category.id)">
+        {{ category.name }}
+      </a>
+    </li>
+  </ul>
+</div>
