@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 export class ButtonCategoryComponent {
   categories: any = [];
 
-  @Output() categorySelected = new EventEmitter<number>();
+@Output() categorySelected = new EventEmitter<{ id: number, name: string }>();
   
   constructor(private categorieServices: CategoriesService ){}
   
@@ -20,7 +20,9 @@ export class ButtonCategoryComponent {
       this.categories = data;
     });
   }
- selectCategory(id: number) {
-    this.categorySelected.emit(id);
-  }
+selectCategory(categoryId: number, categoryName: string) {
+  this.categorySelected.emit({ id: categoryId, name: categoryName });
+ 
+
+}
 }
