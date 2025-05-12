@@ -13,21 +13,38 @@ import { ProductService } from '../../services/product.service';
 export class CardProductComponent {
   products: any[] = [];
   allProducts: any[] = [];
+  alertMessage: string = '';
+  isLoading: boolean = true;
+
   constructor(private productService: ProductService) {}
 
   ngOnInit() {
     this.productService.getAllProducts().subscribe(data => {
+      this.isLoading = false; 
       this.products = data;
-      this.allProducts = data; 
+      this.allProducts = data;
+
+      if (data.length === 0) {
+        this.alertMessage = 'No hay productos disponibles';
+      }
+    }, error => {
+      this.isLoading = false;
+      this.alertMessage = 'Error al cargar productos';
     });
   }
-   filterByCategory(categoryId: number) {
-     if (categoryId === 0) {
-    // Mostrar todos los productos
-    this.products = this.allProducts;
+
+  filterByCategory(categoryId: number) {
+    if (categoryId === 0) {
+      this.products = this.allProducts;
     } else {
-    // Filtrar por categoría
-    this.products = this.allProducts.filter(product => product.category_id === categoryId);
-  }
+      this.products = this.allProducts.filter(product => product.category_id === categoryId );
+    }
+
+    // Mostrar mensaje si no hay resultados
+    if (this.products.length === 0) {
+      this.alertMessage = 'No hay productos para esta categoría';
+    } else {
+      this.alertMessage = '';
+    }
   }
 }

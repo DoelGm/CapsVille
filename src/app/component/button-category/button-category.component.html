@@ -4,10 +4,10 @@
   </button>
   <ul class="dropdown-menu">
      <li>
-      <a class="dropdown-item" (click)="selectCategory(0)">Todos</a>
+      <a class="dropdown-item" (click)="selectCategory(0, 'Todos los Productos')">Todos</a>
     </li>
     <li *ngFor="let category of categories">
-      <a class="dropdown-item" (click)="selectCategory(category.id)">
+      <a class="dropdown-item" (click)="selectCategory(category.id, category.name)">
         {{ category.name }}
       </a>
     </li>

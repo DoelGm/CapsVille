@@ -1,27 +1,25 @@
 <section class="mt-5 pt-4 mx-5">
-    <div class="row">
-        <div class="col-md-12">
-            <!-- Nombre del tipo de producto -->
-            <h1 class="text-center">Nombre la categoria</h1>
-            <!-- Fila para el nombre de los productos y los filtros -->
-            <div class="row">
-                 <!-- Dividir la pantalla en dos -->
-                <div class="col-md-6"></div>
-                <div class="col-md-6">
-                    <!-- Filtros para los productos -->
-                    <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-3"></div>
-                        <div class="col-md-3"></div>
-                        <div class="col-md-3">
-                            <app-button-category (categorySelected)="card.filterByCategory($event)"></app-button-category>
-                        </div>
-                    </div>
-                </div>
+  <div class="row">
+    <div class="col-md-12">
+      <!-- Mostrar nombre de la categoría -->
+      <h1 class="text-center">{{ selectedCategoryName }}</h1>
+
+      <div class="row">
+        <div class="col-md-6"></div>
+        <div class="col-md-6">
+          <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-3"></div>
+            <div class="col-md-3"></div>
+            <div class="col-md-3">
+              <!-- Emitimos el evento con el objeto (id y name) -->
+              <app-button-category (categorySelected)="onCategorySelected($event)"></app-button-category>
             </div>
+          </div>
         </div>
-    </div> 
-     <!-- Fila para los productos -->
-    <app-card-product #card></app-card-product>
- 
+      </div>
+    </div>
+  </div>
+
+  <app-card-product #card></app-card-product>
 </section>
