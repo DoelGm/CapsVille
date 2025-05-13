@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from "./component/header/header.component";
-import { FooterComponent } from "./component/footer/footer.component";
+import { HeaderComponent } from "./component/public/header/header.component";
+import { FooterComponent } from "./component/public/footer/footer.component";
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({
