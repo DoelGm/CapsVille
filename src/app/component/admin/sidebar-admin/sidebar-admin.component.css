@@ -1,0 +1,19 @@
+a{
+    background-color: rgb(255, 255, 255);
+    text-decoration: none;
+    color: #000;
+   padding: 10px;
+    display: block;
+    border-radius: 5px;
+    margin: 5px 0;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+a:hover{
+    background-color: rgb(233, 233, 233);
+}
+
+.accordion-item{
+    margin: 10px 0;
+}
