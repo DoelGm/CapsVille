@@ -8,6 +8,7 @@ import { PublicLayoutComponent } from './layouts/public-layout/public-layout.com
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 import { LoginComponent } from './pages/auth/login/login.component';
+import { ProductComponent } from './pages/public/product/product.component';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,7 @@ export const routes: Routes = [
       { path: '', component: HomeComponent },
       { path: 'post', component: PostComponent },
       { path: 'catalog', component: CatalogComponent },
+       { path: 'product/:id', component: ProductComponent},
       { path: 'login', component: LoginComponent }
     ]
   },
