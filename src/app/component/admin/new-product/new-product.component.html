@@ -1,1 +1,64 @@
-<p>new-product works!</p>
+<section class="mt-4 pt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 p-4 bg-light rounded shadow">
+                    <h1 class="text-start">Nuevo Producto</h1>
+                <form>
+                    <div class="mb-4">
+                        <label for="name" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="name" placeholder="Gorra negra" formControlName="name">
+                    </div>
+                    <div class="mb-4">
+                        <label for="description" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="description" formControlName="description"></textarea>
+                    </div>
+                   <div class="mb-3">
+                        <label for="formFile" class="form-label">Multimedia</label>
+                        <input class="form-control" type="file" id="formFile">
+                    </div>
+                    <div class="mb-4">
+                        <label for="stock" class="form-label">Categoría</label>
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected>Open this select menu</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="mb-4">
+                                <label for="stock" class="form-label">Stoke</label>
+                                <input type="number" class="form-control" id="stock"  placeholder="0.0" formControlName="price">
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Precio</h3>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="mb-4">
+                                <label for="price" class="form-label">Precio</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="price" placeholder="0.0" formControlName="price">
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-4">
+                                <label for="price" class="form-label">Precio de comparacion</label>
+                                 <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="price"  placeholder="0.0" formControlName="price">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-danger">Crear Producto</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
