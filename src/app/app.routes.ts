@@ -10,6 +10,9 @@ import { DashboardComponent } from './pages/admin/dashboard/dashboard.component'
 import { LoginComponent } from './pages/auth/login/login.component';
 import { ProductComponent } from './pages/public/product/product.component';
 import { NewProductComponent } from './component/admin/new-product/new-product.component';
+import { ProductTableComponent } from './component/admin/product-table/product-table.component';
+import { UsersTableComponent } from './component/admin/users-table/users-table.component';
+import { NewTicketComponent } from './component/admin/new-ticket/new-ticket.component';
 
 export const routes: Routes = [
   {
@@ -28,7 +31,10 @@ export const routes: Routes = [
     component: AdminLayoutComponent,
     children: [
       { path: '', component:  DashboardComponent},
-      { path: 'new-product', component:  NewProductComponent}
+      { path: 'new-product', component:  NewProductComponent},
+      { path: 'product-list', component:  ProductTableComponent},
+      { path: 'user-list', component:  UsersTableComponent},
+      { path: 'new-ticket', component:  NewTicketComponent},
     ]
   }
 ];

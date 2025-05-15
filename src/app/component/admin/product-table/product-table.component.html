@@ -1,0 +1,36 @@
+
+<section class="mt-4 pt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 p-4 bg-light rounded shadow">
+             <h1>Lista de productos</h1>
+                <table class="table shadow-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Stoke</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let product of products">
+                            <td>{{ product.id }}</td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.description }}</td>
+                            <td>{{ product.description }}</td>
+                            <td>{{ product.price | currency }}</td>
+                            <td>
+                                <!-- Add action buttons here -->
+                                <button class="btn btn-primary btn-sm" (click)="editProduct(product.id)">Editar</button>
+                                <button class="btn btn-danger btn-sm" (click)="deleteProduct(product.id)">Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
