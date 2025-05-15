@@ -9,6 +9,7 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 import { LoginComponent } from './pages/auth/login/login.component';
 import { ProductComponent } from './pages/public/product/product.component';
+import { NewProductComponent } from './component/admin/new-product/new-product.component';
 
 export const routes: Routes = [
   {
@@ -26,7 +27,8 @@ export const routes: Routes = [
     path: 'admin',
     component: AdminLayoutComponent,
     children: [
-      { path: '', component:  DashboardComponent}
+      { path: '', component:  DashboardComponent},
+      { path: 'new-product', component:  NewProductComponent}
     ]
   }
 ];
