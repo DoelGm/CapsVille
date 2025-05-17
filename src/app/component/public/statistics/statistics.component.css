@@ -1,0 +1,48 @@
+/* Quitar márgenes/paddings generales */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Fondo con imagen oscurecida */
+.section-background {
+  position: relative;
+  background-image: url('/imgs/gorra-negra-mostrador-madera-banner-fondo-borroso-ia-generativa_446633-7831.avif');
+  background-size: cover;
+  background-position: center;
+  min-height: 95vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Capa oscura encima de la imagen */
+.section-background::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+}
+
+/* Contenedor encima del fondo */
+.section-background .container {
+  position: relative;
+  z-index: 2;
+  padding: 2rem;
+}
+
+/* Iconos con efecto suave */
+.icon-hover {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.icon-hover:hover {
+  transform: scale(1.1);
+  opacity: 0.7;
+}
