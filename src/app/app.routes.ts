@@ -13,6 +13,9 @@ import { NewProductComponent } from './component/admin/new-product/new-product.c
 import { ProductTableComponent } from './component/admin/product-table/product-table.component';
 import { UsersTableComponent } from './component/admin/users-table/users-table.component';
 import { NewTicketComponent } from './component/admin/new-ticket/new-ticket.component';
+import { NewCustumerComponent } from './component/admin/new-custumer/new-custumer.component';
+import { CustumerTableComponent } from './component/admin/custumer-table/custumer-table.component';
+import { NewUserComponent } from './component/admin/new-user/new-user.component';
 
 export const routes: Routes = [
   {
@@ -34,6 +37,9 @@ export const routes: Routes = [
       { path: 'new-product', component:  NewProductComponent},
       { path: 'product-list', component:  ProductTableComponent},
       { path: 'user-list', component:  UsersTableComponent},
+      { path: 'new-user', component:  NewUserComponent},
+      { path: 'customer-list', component:  CustumerTableComponent},
+      { path: 'new-customer', component:  NewCustumerComponent},
       { path: 'new-ticket', component:  NewTicketComponent},
     ]
   }

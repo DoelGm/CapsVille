@@ -13,6 +13,8 @@ import html2canvas from 'html2canvas';
 })
 export class NewTicketComponent {
   @ViewChild('pdfContent') pdfContent!: ElementRef;
+  @ViewChild('imagenPreview', { static: false }) imagenPreview!: ElementRef;
+
 
   // Datos del formulario
   ticketData: any = null;
@@ -41,4 +43,40 @@ export class NewTicketComponent {
       doc.save('ticket_resumen.pdf');
     });
   }
+  generateImage() {
+  const content = this.pdfContent.nativeElement;
+
+  html2canvas(content).then(canvas => {
+    scale: 2
+    useCORS: true
+    const imageData = canvas.toDataURL('image/png');
+
+    
+    const imgElement = document.createElement('img');
+    imgElement.src = imageData;
+    imgElement.alt = 'Resumen del ticket';
+    imgElement.style.maxWidth = '100%';
+    imgElement.style.marginTop = '20px';
+
+    // Buscar contenedor seguro
+    const previewContainer = document.getElementById('imagenPreview');
+    
+    if (previewContainer) {
+      previewContainer.innerHTML = ''; // Limpiar contenido anterior
+      previewContainer.appendChild(imgElement);
+      const link = document.createElement('a');
+      link.href = imageData;
+      link.download = 'ticket_resumen.png';
+      link.innerText = 'Descargar imagen 🖼️';
+      link.className = 'btn btn-success mt-2';
+      previewContainer.appendChild(link);
+
+    } else {
+      console.error('No se encontró el contenedor con id="imagenPreview"');
+    }
+    
+  });
+}
+
+
 }

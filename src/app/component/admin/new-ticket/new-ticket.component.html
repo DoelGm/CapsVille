@@ -4,42 +4,61 @@
     <div class="container">
       <div class="row">
         <div class="col-md-10 p-4 bg-light rounded shadow">
-          <h1 class="text-start">Nuevo Ticket de Soporte</h1>
+          <h1 class="text-start">Nuevo Ticket</h1>
           <form #ticketForm="ngForm" (ngSubmit)="submitForm(ticketForm)">
             <div class="mb-4">
-              <label for="cliente" class="form-label">Nombre completo</label>
-              <input type="text" class="form-control" id="cliente" name="cliente" ngModel required>
+              <label for="cliente" class="form-label">Nombre del Cliente</label>
+              <select name="cliente" id="cliente" class="form-select" ngModel required>
+                <option value="" disabled selected>Selecciona un cliente</option>
+                <option></option>
+              </select>
             </div>
 
             <div class="mb-4">
               <label for="email" class="form-label">Correo electrónico</label>
-              <input type="email" class="form-control" id="email" name="email" ngModel required>
+              <input type="email" disabled="" class="form-control" value="ejemplo@gmail.com" id="email" name="email" ngModel required>
             </div>
 
             <div class="mb-4">
-              <label for="pedido" class="form-label">Número de pedido</label>
-              <input type="text" class="form-control" id="pedido" name="pedido" ngModel required>
+              <label for="pedido" class="form-label">Folio</label>
+              <div class="row">
+                <div class="col-2">
+                    <input type="number" class="form-control" id="pedido" name="pedido" ngModel required>
+                </div>
+              </div>
+              
             </div>
 
             <div class="mb-4">
               <label for="titulo" class="form-label">Asunto</label>
-              <input type="text" class="form-control" id="titulo" name="titulo" ngModel required>
-            </div>
-
-            <div class="mb-4">
-              <label for="descripcion" class="form-label">Descripción detallada</label>
-              <textarea class="form-control" id="descripcion" name="descripcion" ngModel required></textarea>
-            </div>
-
-            <div class="mb-4">
-              <label for="categoria" class="form-label">Tipo de problema</label>
-              <select class="form-select" id="categoria" name="categoria" ngModel required>
-                <option value="" disabled selected>Selecciona una opción</option>
-                <option value="producto">Producto defectuoso</option>
-                <option value="talla">Talla incorrecta</option>
-                <option value="envio">Problema con el envío</option>
-                <option value="otro">Otro</option>
+              <select name="titulo" id="titulo" class="form-select" ngModel required>
+                <option value="" disabled selected>Selecciona un asunto</option>
+                <option value="consulta">Venta</option>
+                <option value="queja">Compra</option>
               </select>
+            </div>
+
+            <div class="mb-4">
+              <h3>Productos</h3>
+              <hr>
+                  <label for="descripcion" class="form-label">Producto</label>
+                  <select name="producto" id="producto" class="form-select" ngModel required>
+                    <option value="" disabled selected>Selecciona un producto</option>
+                    <option></option>
+                  </select>
+            </div>
+            <div class="mb-4">
+              <div class="row">
+                <div class="col-5">
+                  <label for="Producto" class="form-label">Producto</label>
+                  <input type="text" disabled class="form-control" id="Producto" name="Producto" ngModel required>
+                </div>
+                <div class="col-2"> 
+                  <label for="cantidad" class="form-label">Cantidad</label>
+                  <input type="number" class="form-control" id="cantidad" name="cantidad" ngModel required>
+                </div>
+              </div>
+             
             </div>
 
             <button type="submit" class="btn btn-danger">Enviar Ticket</button>
@@ -50,11 +69,11 @@
   </section>
 </div>
 
-<div class="row">
+<div class="row ">
   <div class="col-md-5">
     <!-- RESUMEN DEL TICKET -->
-    <div *ngIf="ticketData" class="container mt-5 pt-3">
-      <div #pdfContent class="p-4 bg-white border rounded shadow">
+    <div *ngIf="ticketData"  id="imagenPreview" class="container mt-5 pt-3">
+      <div #pdfContent class="p-4 bg-white border rounded">
         <div class="row">
           <div class="col-md-6">
             <h2 class="mb-4 p-2 text-start">🧢 Caps Ville</h2>
@@ -119,7 +138,8 @@
       </div>
 
       <div class="text-center mt-4">
-        <button class="btn btn-success" (click)="generatePDF()">📄 Descargar PDF</button>
+        <button class="btn btn-success m-2" (click)="generatePDF()">📄 Descargar PDF</button>
+        <button class="btn btn-success" (click)="generateImage()">📄 Descargar PNG</button>
       </div>
     </div>
   </div>

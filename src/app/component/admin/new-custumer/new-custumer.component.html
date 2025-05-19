@@ -1,0 +1,24 @@
+<section class="mt-4 pt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 p-4 bg-light rounded shadow">
+                <h1 class="text-start">Nuevo Cliente</h1>
+                <form>
+                    <div class="mb-4">
+                        <label for="fullName" class="form-label">Nombre completo</label>
+                        <input type="text" class="form-control" id="fullName" placeholder="Nombre y apellido" formControlName="fullName">
+                    </div>
+                    <div class="mb-4">
+                        <label for="phone" class="form-label">Número de teléfono</label>
+                        <input type="tel" class="form-control" id="phone" placeholder="55 1234 5678" formControlName="phone">
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="form-label">Correo electrónico</label>
+                        <input type="email" class="form-control" id="email" placeholder="cliente@ejemplo.com" formControlName="email">
+                    </div>
+                    <button type="submit" class="btn btn-success">Agregar Cliente</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

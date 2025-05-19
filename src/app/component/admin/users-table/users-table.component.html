@@ -18,10 +18,10 @@
                             <td>{{ user.id }}</td>
                             <td>{{ user.name }}</td>
                             <td>{{ user.email }}</td>
-                            <td>{{ user.price | currency }}</td>
+                            <td>{{ user.role }}</td>
                             <td>
                                 <!-- Add action buttons here -->
-                                <button class="btn btn-primary btn-sm" (click)="editUser(user.id)">Editar</button>
+                                <button class="btn btn-primary btn-sm me-2" (click)="editUser(user.id)">Editar</button>
                                 <button class="btn btn-danger btn-sm" (click)="deleteUser(user.id)">Eliminar</button>
                             </td>
                         </tr>
