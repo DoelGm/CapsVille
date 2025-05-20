@@ -38,4 +38,17 @@ section {
   background-color: #000000;
 }
 
+/* 🎯 Media query para pantallas de 1080px o menos */
+@media (max-width: 1080px) {
+  .carousel-item {
+    height: 75vh;
+  }
+}
+
+/* 🎯 Media query para pantallas de 720px o menos */
+@media (max-width: 720px) {
+  .carousel-item {
+    height: 60vh;
+  }
+}
 
