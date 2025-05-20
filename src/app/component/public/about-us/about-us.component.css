@@ -1,4 +1,37 @@
-  .bg-custom {
-    background-color: #b50000; /* Cambia el color que desees */
-    color: white; /* Si el fondo es oscuro, el texto blanco ayuda */
+/* Estilos generales */
+.bg-custom {
+  background-color: #b50000;
+  color: white;
+}
+
+/* Para ajustar imagen responsiva si es necesario */
+.image-side img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* Ajustes para móviles (menos de 768px) */
+@media (max-width: 767px) {
+  .custom-section {
+    height: auto !important; /* Que crezca con el contenido */
+    padding: 20px 10px;
   }
+
+  .text-container {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .text-container h2 {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+    padding: 0;
+    text-align: center;
+  }
+
+  .text-container p {
+    font-size: 1rem;
+    text-align: justify;
+  }
+}
