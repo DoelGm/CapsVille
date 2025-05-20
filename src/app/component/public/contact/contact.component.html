@@ -1,30 +1,28 @@
 <section class="container my-5">
-  <h2 class="text-center mb-4 display-5 fw-bold text-dark">¿Tienes dudas o quieres más info?</h2>
-  <p class="text-center text-muted mb-5">Envíanos un mensaje y te responderemos lo antes posible.</p>
-
-  <form action="https://formsubmit.co/TU_CORREO@ejemplo.com" method="POST" class="mx-auto shadow-lg p-4 rounded-4 bg-white animate-fade-in-up" style="max-width: 600px;">
+  <h2 data-aos="fade-down" class="text-center mb-4">Contáctenos</h2>
+  <form action="https://formsubmit.co/TU_CORREO@ejemplo.com" method="POST" class="mx-auto" style="max-width: 600px;">
     
     <!-- Nombre -->
-    <div class="form-floating mb-4">
-      <input type="text" class="form-control form-control-lg rounded-3" id="nombre" name="nombre" placeholder="Tu nombre completo" required>
-      <label for="nombre">Nombre completo</label>
+    <div class="mb-3">
+      <label data-aos="fade-down" for="nombre" class="form-label">Nombre</label>
+      <input data-aos="fade-up" type="text" class="form-control" id="nombre" name="nombre" required placeholder="Escribe tu nombre">
     </div>
 
     <!-- Correo -->
-    <div class="form-floating mb-4">
-      <input type="email" class="form-control form-control-lg rounded-3" id="email" name="email" placeholder="correo@ejemplo.com" required>
-      <label for="email">Correo electrónico</label>
+    <div class="mb-3">
+      <label data-aos="fade-down" for="email" class="form-label">Correo electrónico</label>
+      <input data-aos="fade-up" type="email" class="form-control" id="email" name="email" required placeholder="Escribe tu correo electrónico">
     </div>
 
     <!-- Mensaje -->
-    <div class="form-floating mb-4">
-      <textarea class="form-control form-control-lg rounded-3" placeholder="Escribe tu mensaje aquí..." id="mensaje" name="mensaje" style="height: 150px;" required></textarea>
-      <label for="mensaje">¿En qué podemos ayudarte?</label>
+    <div class="mb-3">
+      <label data-aos="fade-down" for="mensaje" class="form-label">Mensaje</label>
+      <textarea  data-aos="fade-up" class="form-control" id="mensaje" name="mensaje" rows="5" required></textarea>
     </div>
 
     <!-- Botón -->
     <div class="text-center">
-      <button type="submit" class="btn btn-danger btn-lg px-5 py-2 shadow-sm">Enviar mensaje</button>
+      <button type="submit"  data-aos="fade-up" class="btn btn-primary">Enviar mensaje</button>
     </div>
 
     <!-- Evitar spam -->

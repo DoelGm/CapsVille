@@ -1,0 +1,34 @@
+
+<section class="mt-4 pt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 p-4 bg-light rounded shadow">
+             <h1>Lista de useros</h1>
+                <table class="table shadow-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Correo electronico</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of users">
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.role }}</td>
+                            <td>
+                                <!-- Add action buttons here -->
+                                <button class="btn btn-primary btn-sm me-2" (click)="editUser(user.id)">Editar</button>
+                                <button class="btn btn-danger btn-sm" (click)="deleteUser(user.id)">Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+</section>
