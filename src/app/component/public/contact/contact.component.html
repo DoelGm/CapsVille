@@ -1,33 +1,37 @@
 <section class="container my-5">
-  <h2 class="text-center mb-4 display-5 fw-bold text-dark">¿Tienes dudas o quieres más info?</h2>
-  <p class="text-center text-muted mb-5">Envíanos un mensaje y te responderemos lo antes posible.</p>
+  <h2 data-aos="fade-down" class="text-center mb-4 display-5 fw-bold text-dark">
+    ¿Tienes dudas o quieres más info?
+  </h2>
+  <p data-aos="fade-up" class="text-center text-muted mb-5">
+    Envíanos un mensaje y te responderemos lo antes posible.
+  </p>
 
-  <form action="https://formsubmit.co/TU_CORREO@ejemplo.com" method="POST" class="mx-auto shadow-lg p-4 rounded-4 bg-white animate-fade-in-up" style="max-width: 600px;">
+  <form action="https://formsubmit.co/TU_CORREO@ejemplo.com" method="POST" class="mx-auto shadow-lg p-4 rounded-4 bg-white" style="max-width: 600px;">
     
     <!-- Nombre -->
-    <div class="form-floating mb-4">
+    <div data-aos="fade-up" class="form-floating mb-4">
       <input type="text" class="form-control form-control-lg rounded-3" id="nombre" name="nombre" placeholder="Tu nombre completo" required>
       <label for="nombre">Nombre completo</label>
     </div>
 
     <!-- Correo -->
-    <div class="form-floating mb-4">
+    <div data-aos="fade-up" class="form-floating mb-4">
       <input type="email" class="form-control form-control-lg rounded-3" id="email" name="email" placeholder="correo@ejemplo.com" required>
       <label for="email">Correo electrónico</label>
     </div>
 
     <!-- Mensaje -->
-    <div class="form-floating mb-4">
+    <div data-aos="fade-up" class="form-floating mb-4">
       <textarea class="form-control form-control-lg rounded-3" placeholder="Escribe tu mensaje aquí..." id="mensaje" name="mensaje" style="height: 150px;" required></textarea>
       <label for="mensaje">¿En qué podemos ayudarte?</label>
     </div>
 
     <!-- Botón -->
-    <div class="text-center">
+    <div data-aos="fade-up" class="text-center">
       <button type="submit" class="btn btn-danger btn-lg px-5 py-2 shadow-sm">Enviar mensaje</button>
     </div>
 
-    <!-- Evitar spam -->
+    <!-- Evitar captcha de formsubmit -->
     <input type="hidden" name="_captcha" value="false">
   </form>
 </section>

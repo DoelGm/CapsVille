@@ -7,7 +7,7 @@ import { CardProductComponent } from "../../../component/public/card-product/car
   selector: 'app-product',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.css'],
-  imports: [CardProductComponent]
+  imports: []
 })
 export class ProductComponent implements OnInit {
 

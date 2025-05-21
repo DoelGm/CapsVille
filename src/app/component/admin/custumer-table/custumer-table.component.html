@@ -1,0 +1,32 @@
+<section class="mt-4 pt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 p-4 bg-light rounded shadow">
+                <h1>Lista de Clientes</h1>
+                <table class="table shadow-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Correo electrónico</th>
+                            <th scope="col">Teléfono</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let customer of customers">
+                            <td>{{ customer.id }}</td>
+                            <td>{{ customer.name }}</td>
+                            <td>{{ customer.email }}</td>
+                            <td>{{ customer.phone }}</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm me-2" (click)="editCustomer(customer.id)">Editar</button>
+                                <button class="btn btn-danger btn-sm" (click)="deleteCustomer(customer.id)">Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
