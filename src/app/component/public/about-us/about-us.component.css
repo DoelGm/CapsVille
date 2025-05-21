@@ -34,4 +34,9 @@
     font-size: 1rem;
     text-align: justify;
   }
+
+  /* Opcional: si deseas que la imagen se muestre primero en móviles */
+  .row {
+    flex-direction: column-reverse;
+  }
 }
