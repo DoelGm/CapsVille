@@ -1,0 +1,43 @@
+/* Contenedor de imagen optimizado para móvil */
+.mobile-img-container {
+  width: 100%;
+  height: 60vw; /* Relación de aspecto más ancha */
+  min-height: 200px;
+  max-height: 350px;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Ajustes específicos para móvil */
+@media (max-width: 768px) {
+  .box-product {
+    padding: 20px 15px !important;
+    margin: 20px 0 !important;
+    border-radius: 12px !important;
+  }
+  
+  .card {
+    border-radius: 12px !important;
+  }
+  
+  .card-body {
+    padding: 20px !important;
+  }
+  
+  .card-title {
+    font-size: 1.4rem !important;
+  }
+  
+  h3 {
+    font-size: 1.8rem !important;
+    margin-bottom: 20px !important;
+  }
+}
+
+/* Efecto hover solo para desktop */
+@media (min-width: 769px) {
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(255, 0, 0, 0.2) !important;
+  }
+}
