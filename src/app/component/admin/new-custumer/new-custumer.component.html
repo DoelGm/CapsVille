@@ -3,20 +3,28 @@
         <div class="row">
             <div class="col-md-10 p-4 bg-light rounded shadow">
                 <h1 class="text-start">Nuevo Cliente</h1>
-                <form>
+                 <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ successMessage }}
+                    <button type="button" class="btn-close" (click)="successMessage = null" aria-label="Close"></button>
+                </div>
+                <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ errorMessage }}
+                    <button type="button" class="btn-close" (click)="errorMessage = null" aria-label="Close"></button>
+                </div>
+                <form (ngSubmit)="addCustomer()" #customerForm="ngForm">
                     <div class="mb-4">
-                        <label for="fullName" class="form-label">Nombre completo</label>
-                        <input type="text" class="form-control" id="fullName" placeholder="Nombre y apellido" formControlName="fullName">
+                        <label for="name" class="form-label">Nombre completo</label>
+                        <input type="text" class="form-control" id="name" [(ngModel)]="customer.name" placeholder="Nombre y apellido" name="name" required>
                     </div>
                     <div class="mb-4">
                         <label for="phone" class="form-label">Número de teléfono</label>
-                        <input type="tel" class="form-control" id="phone" placeholder="55 1234 5678" formControlName="phone">
+                        <input type="tel" class="form-control" minlength="10" id="phone" [(ngModel)]="customer.phone" placeholder="55 1234 5678" name="phone" required>
                     </div>
                     <div class="mb-4">
                         <label for="email" class="form-label">Correo electrónico</label>
-                        <input type="email" class="form-control" id="email" placeholder="cliente@ejemplo.com" formControlName="email">
+                        <input type="email" class="form-control" id="email" [(ngModel)]="customer.email" placeholder="cliente@ejemplo.com" name="email" required>
                     </div>
-                    <button type="submit" class="btn btn-success">Agregar Cliente</button>
+                    <button type="submit" [disabled]="customerForm.invalid" class="btn btn-success">Agregar Cliente</button>
                 </form>
             </div>
         </div>

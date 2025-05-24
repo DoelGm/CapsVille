@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+
 import { ProductService } from '../../../services/product.service';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-card-product',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterLink], 
+  imports: [CommonModule, RouterLink], 
   templateUrl: './card-product.component.html',
   styleUrls: ['./card-product.component.css']
 })

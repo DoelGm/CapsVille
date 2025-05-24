@@ -1,36 +1,34 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductService {
+export class CustomerService {
   private headers = new HttpHeaders({
     'Authorization': `Bearer ${localStorage.getItem('token')}`
   });
-  private apiUrl = 'http://localhost:8000/api/products';
+  private apiUrl = 'http://localhost:8000/api/customers';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  getAllProducts(): Observable<any> {
-    return this.http.get(this.apiUrl);
+  getCustomers() {
+    return this.http.get(this.apiUrl, { headers: this.headers });
   }
 
-  getProduct(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`);
+  getCustomer(id: number) {
+    return this.http.get(`${this.apiUrl}/${id}`, { headers: this.headers });
   }
-  
 
-  createProduct(data: any): Observable<any> {
+  createCustomer(data: any) {
     return this.http.post(this.apiUrl, data, { headers: this.headers });
   }
 
-  updateProduct(id: number, data: any): Observable<any> {
+  updateCustomer(id: number, data: any) {
     return this.http.put(`${this.apiUrl}/${id}`, data, { headers: this.headers });
   }
 
-  deleteProduct(id: number): Observable<any> {
+  deleteCustomer(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.headers });
   }
 }

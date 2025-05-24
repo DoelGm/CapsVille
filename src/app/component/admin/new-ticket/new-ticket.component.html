@@ -8,22 +8,24 @@
           <form #ticketForm="ngForm" (ngSubmit)="submitForm(ticketForm)">
             <div class="mb-4">
               <label for="cliente" class="form-label">Nombre del Cliente</label>
-              <select name="cliente" id="cliente" class="form-select" ngModel required>
+              <select name="cliente"  (change)="onCustomerSelected($event)" id="cliente" class="form-select" ngModel required>
                 <option value="" disabled selected>Selecciona un cliente</option>
-                <option></option>
+                <option *ngFor="let customer of customers"   [value]="customer.id">{{ customer.name }}</option>
               </select>
             </div>
 
             <div class="mb-4">
               <label for="email" class="form-label">Correo electrónico</label>
-              <input type="email" disabled="" class="form-control" value="ejemplo@gmail.com" id="email" name="email" ngModel required>
+              <input type="email" disabled class="form-control" 
+                [value]="selectedCustomer?.email || ''" 
+                id="email" name="email" readonly required>
             </div>
 
             <div class="mb-4">
-              <label for="pedido" class="form-label">Folio</label>
+              <label for="id" class="form-label">Folio</label>
               <div class="row">
                 <div class="col-2">
-                    <input type="number" class="form-control" id="pedido" name="pedido" ngModel required>
+                    <input type="number" class="form-control" id="id" name="id" ngModel required>
                 </div>
               </div>
               
@@ -38,29 +40,64 @@
               </select>
             </div>
 
-            <div class="mb-4">
+          <div class="mb-4">
               <h3>Productos</h3>
               <hr>
-                  <label for="descripcion" class="form-label">Producto</label>
-                  <select name="producto" id="producto" class="form-select" ngModel required>
-                    <option value="" disabled selected>Selecciona un producto</option>
-                    <option></option>
-                  </select>
-            </div>
-            <div class="mb-4">
               <div class="row">
-                <div class="col-5">
-                  <label for="Producto" class="form-label">Producto</label>
-                  <input type="text" disabled class="form-control" id="Producto" name="Producto" ngModel required>
+                <div class="col-md-5">
+                  <label for="producto" class="form-label">Producto</label>
+                  <select name="producto" id="producto" class="form-select" 
+                          (change)="onProductSelected($event)" required>
+                    <option value="" disabled selected>Selecciona un producto</option>
+                    <option *ngFor="let product of products" [value]="product.id">
+                      {{ product.name }} - {{ product.price | currency }}
+                    </option>
+                  </select>
                 </div>
-                <div class="col-2"> 
+                <div class="col-md-2">
                   <label for="cantidad" class="form-label">Cantidad</label>
-                  <input type="number" class="form-control" id="cantidad" name="cantidad" ngModel required>
+                  <input type="number" class="form-control" id="cantidad" 
+                        [(ngModel)]="selectedQuantity" name="cantidad" min="1" required>
+                </div>
+                <div class="col-md-3 d-flex align-items-end ">
+                  <button type="button" class="btn btn-primary" (click)="addProductToTicket()">
+                    Agregar Producto
+                  </button>
+                </div>
+                <div class="mb-4" *ngIf="ticketItems.length > 0">
+                  <table class="table table-bordered mt-3">
+                    <thead>
+                      <tr>
+                        <th>Producto</th>
+                        <th>Precio Unitario</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of ticketItems; let i = index">
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.product.price | currency }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.product.price * item.quantity | currency }}</td>
+                        <td>
+                          <button class="btn btn-sm btn-danger" (click)="removeItem(i)">
+                            Eliminar
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                        <td colspan="2">{{ calculateTotal() | currency }}</td>
+                      </tr>
+                    </tfoot>
+                  </table>
                 </div>
               </div>
-             
             </div>
-
             <button type="submit" class="btn btn-danger">Enviar Ticket</button>
           </form>
         </div>
@@ -76,29 +113,30 @@
       <div #pdfContent class="p-4 bg-white border rounded">
         <div class="row">
           <div class="col-md-6">
-            <h2 class="mb-4 p-2 text-start">🧢 Caps Ville</h2>
+            <h2 class="mb-4 p-2 text-start"><img src="imgs/CAPSVILLAGE-11.png" width="50" alt=""> Caps Ville</h2>
           </div>
           <div class="col-md-6">
-            <h2 class="mb-4 p-2 text-end">🎫 Número de Ticket</h2>
+            <h2 class="mb-4 p-2 text-end">Folio#{{ ticketData.id }}</h2>
           </div>
         </div>
 
         <div class="container">
-          <h3>🏪 Caps Ville And Wear</h3>
+          <h3>Caps Ville And Wear</h3>
           <p>📍 Villa Hidalgo, Jalisco – Mayoreo y menudeo en gorras originales, genéricas, ropa y accesorios para caballero.</p>
           <p>📞 Teléfono: 33 12 34 56 78</p>
           <p>📧 Email: capsvillegmail.com</p>
           <p>💼 Caps Ville es tu mejor opción para invertir 💸</p>
-
+          <hr>
           <p class="lh-1">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="25" fill="currentColor" class="bi bi-person" viewBox="0 0 16 20">
               <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
             </svg> 
-            <strong> Cliente:</strong> {{ ticketData.cliente }} <br>
-            📧 {{ ticketData.email }}
+            <strong> Cliente:</strong> {{ selectedCustomer.name }} <br>
+            <strong>📞 Teléfono:</strong> {{ selectedCustomer.phone }}
+
           </p>
 
-          <table class="table table-bordered mt-3">
+         <table class="table table-bordered mt-3" *ngIf="ticketData">
             <thead class="table-light">
               <tr>
                 <th>Cantidad</th>
@@ -107,18 +145,18 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>40x</td>
-                <td>🧢 Gorra genérica económica - $40.00</td>
-                <td>$1,600.00</td>
+              <tr *ngFor="let item of ticketData.items">
+                <td>{{ item.quantity }}x</td>
+                <td>{{ item.product.name }} - {{ item.product.price | currency }}</td>
+                <td>{{ item.product.price * item.quantity | currency }}</td>
               </tr>
             </tbody>
           </table>
 
-          <div class="row">
+          <div class="row" *ngIf="ticketData">
             <div class="col-md-6"></div>
             <div class="col-md-6">
-              <p class="text-end"><strong>💵 Total:</strong> $1,600.00</p>
+              <p class="text-end"><strong>💵 Total:</strong> {{ ticketData.total | currency }}</p>
             </div>
           </div>
 
@@ -127,9 +165,9 @@
           <div class="row">
             <div class="col-md-12">
               <p class="text-center">
-                🙏 <strong>¡Gracias por su confianza!</strong><br>
-                🚀 <strong>¡Éxito en sus ventas!</strong><br>
-                🗓️ Fecha de creación del ticket<br>
+                <strong>¡Gracias por su confianza!</strong><br>
+                    <strong>¡Éxito en sus ventas!</strong><br>
+                {{ ticketData.date | date:'dd/MM/yyyy HH:mm' }}<br>
                 💙 Caps Ville And Wear 🧢
               </p>
             </div>

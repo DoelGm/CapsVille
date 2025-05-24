@@ -1,34 +1,48 @@
-
 <section class="mt-4 pt-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 p-4 bg-light rounded shadow">
-             <h1>Lista de useros</h1>
-                <table class="table shadow-sm table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Correo electronico</th>
-                            <th scope="col">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let user of users">
-                            <td>{{ user.id }}</td>
-                            <td>{{ user.name }}</td>
-                            <td>{{ user.email }}</td>
-                            <td>{{ user.role }}</td>
-                            <td>
-                                <!-- Add action buttons here -->
-                                <button class="btn btn-primary btn-sm me-2" (click)="editUser(user.id)">Editar</button>
-                                <button class="btn btn-danger btn-sm" (click)="deleteUser(user.id)">Eliminar</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 p-4 bg-light rounded shadow">
+        <h1 class="text-start mb-4">Lista de Usuarios</h1>
+        <!-- Mensaje de éxito (opcional) -->
+        <!-- <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ successMessage }}
+          <button type="button" class="btn-close" (click)="successMessage = null" aria-label="Close"></button>
+        </div> -->
+        <!-- Tabla de usuarios -->
+        <div class="table-responsive text-center rounded mb-3">
+          <table class="table table-hover  table-borderless align-middle mb-0 bg-white rounded">
+            <thead class="table-secondary">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Correo Electrónico</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                  <button class="btn btn-outline-primary btn-sm me-2" (click)="editUser(user.id)" title="Editar">
+                   <i class="fas fa-pencil-alt me-1"></i> Editar
+                  </button>
+                  <button class="btn btn-outline-danger btn-sm" (click)="deleteUser(user.id)" title="Eliminar">
+                    <i class="fas fa-trash-alt"></i> Eliminar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+        <pagination-controls 
+          (pageChange)="p = $event" 
+          class="my-pagination text-center"
+          previousLabel="Anterior"
+          nextLabel="Siguiente">
+        </pagination-controls>
+      </div>
     </div>
-    
+  </div>
 </section>
