@@ -1,19 +1,27 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { CustomerService } from '../../../services/customer.service';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-custumer-table',
-  imports: [CommonModule],
+  imports: [CommonModule, NgxPaginationModule],
   templateUrl: './custumer-table.component.html',
   styleUrl: './custumer-table.component.css'
 })
 export class CustumerTableComponent {
-  // Sample data for the table
-  customers = [
-    { id: 1, name: 'John Doe', email: 'john@example.com', phone: '555-1234' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', phone: '555-5678' },
-    { id: 3, name: 'Alice Johnson', email: 'alice@example.com', phone: '555-8765' }
-  ];
+  customers: any = [];
+  p: number = 1;
+  itemsPerPage: number = 14;
+
+  constructor(private customerService: CustomerService) {}
+
+  ngOnInit() {
+    this.customerService.getCustomers().subscribe((data) => {
+      this.customers = data;
+    });
+  }
+
   editCustomer(id: number) {}
   deleteCustomer(id: number) {}
 }

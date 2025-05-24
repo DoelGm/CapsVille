@@ -3,29 +3,42 @@
         <div class="row">
             <div class="col-md-12 p-4 bg-light rounded shadow">
                 <h1>Lista de Clientes</h1>
-                <table class="table shadow-sm table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Correo electrónico</th>
-                            <th scope="col">Teléfono</th>
-                            <th scope="col">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let customer of customers">
-                            <td>{{ customer.id }}</td>
-                            <td>{{ customer.name }}</td>
-                            <td>{{ customer.email }}</td>
-                            <td>{{ customer.phone }}</td>
-                            <td>
-                                <button class="btn btn-primary btn-sm me-2" (click)="editCustomer(customer.id)">Editar</button>
-                                <button class="btn btn-danger btn-sm" (click)="deleteCustomer(customer.id)">Eliminar</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive text-center rounded mb-3">
+                    <table class="table table-hover text-center table-borderless align-middle mb-0 bg-white rounded">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Correo electrónico</th>
+                                <th scope="col">Teléfono</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let customer of customers | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+                                <td>{{ customer.id }}</td>
+                                <td>{{ customer.name }}</td>
+                                <td>{{ customer.email }}</td>
+                                <td>{{ customer.phone }}</td>
+                                <td>
+                                    <button class="btn  btn-outline-primary btn-sm me-2" (click)="editCustomer(customer.id)"> 
+                                        <i class="fas fa-pencil-alt me-1"></i> 
+                                        Editar
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm" (click)="deleteCustomer(customer.id)">
+                                        <i class="fas fa-trash-alt"></i> Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <pagination-controls 
+                    (pageChange)="p = $event" 
+                    class="my-pagination text-center "
+                    previousLabel="Anterior"
+                    nextLabel="Siguiente">
+                </pagination-controls>
             </div>
         </div>
     </div>

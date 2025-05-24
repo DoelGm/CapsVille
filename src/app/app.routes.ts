@@ -2,8 +2,6 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/public/home/home.component';
 import { PostComponent } from './pages/public/post/post.component';
 import { CatalogComponent } from './pages/public/catalog/catalog.component';
-
-
 import { PublicLayoutComponent } from './layouts/public-layout/public-layout.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
@@ -16,6 +14,8 @@ import { NewTicketComponent } from './component/admin/new-ticket/new-ticket.comp
 import { NewCustumerComponent } from './component/admin/new-custumer/new-custumer.component';
 import { CustumerTableComponent } from './component/admin/custumer-table/custumer-table.component';
 import { NewUserComponent } from './component/admin/new-user/new-user.component';
+import { NewPostComponent } from './component/admin/new-post/new-post.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -25,22 +25,24 @@ export const routes: Routes = [
       { path: '', component: HomeComponent },
       { path: 'post', component: PostComponent },
       { path: 'catalog', component: CatalogComponent },
-       { path: 'product/:id', component: ProductComponent},
+      { path: 'product/:id', component: ProductComponent },
       { path: 'login', component: LoginComponent }
     ]
   },
   {
     path: 'admin',
     component: AdminLayoutComponent,
+    canActivate: [AuthGuard],
     children: [
-      { path: '', component:  DashboardComponent},
-      { path: 'new-product', component:  NewProductComponent},
-      { path: 'product-list', component:  ProductTableComponent},
-      { path: 'user-list', component:  UsersTableComponent},
-      { path: 'new-user', component:  NewUserComponent},
-      { path: 'customer-list', component:  CustumerTableComponent},
-      { path: 'new-customer', component:  NewCustumerComponent},
-      { path: 'new-ticket', component:  NewTicketComponent},
+      { path: '', component: DashboardComponent },
+      { path: 'new-product', component: NewProductComponent },
+      { path: 'product-list', component: ProductTableComponent },
+      { path: 'user-list', component: UsersTableComponent },
+      { path: 'new-user', component: NewUserComponent },
+      { path: 'customer-list', component: CustumerTableComponent },
+      { path: 'new-customer', component: NewCustumerComponent },
+      { path: 'new-ticket', component: NewTicketComponent },
+      { path: 'new-post', component: NewPostComponent },
     ]
   }
 ];
