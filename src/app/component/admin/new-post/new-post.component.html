@@ -1,1 +1,58 @@
-<p>new-post works!</p>
+<section class="mt-4 pt-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 p-4 bg-light rounded shadow">
+        <h1 class="text-start">Nueva noticia</h1>
+      <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ successMessage }}
+                    <button type="button" class="btn-close" (click)="successMessage = null" aria-label="Close"></button>
+                </div>
+                <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ errorMessage }}
+                    <button type="button" class="btn-close" (click)="errorMessage = null" aria-label="Close"></button>
+                </div>
+        <form #postForm="ngForm" (ngSubmit)="addPost()">
+          <div class="mb-4">
+            <label for="title" class="form-label">Título</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              placeholder="Título de la noticia"
+              [(ngModel)]="post.title"
+              name="title"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="content" class="form-label">Contenido</label>
+            <textarea
+              class="form-control"
+              id="content"
+              placeholder="Contenido de la noticia"
+              [(ngModel)]="post.content"
+              name="content"
+              required
+            ></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="imageUrl" class="form-label">Imagen (URL)</label>
+            <input
+              type="text"
+              class="form-control"
+              id="imageUrl"
+              placeholder="URL de la imagen (opcional)"
+              [(ngModel)]="post.imgs"
+              name="imgs"
+            />
+          </div>
+          
+
+          <button type="submit"  [disabled]="postForm.invalid" class="btn btn-primary">Crear noticia</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

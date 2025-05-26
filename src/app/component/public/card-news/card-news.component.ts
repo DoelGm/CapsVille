@@ -19,15 +19,15 @@ export class CardNewsComponent implements OnInit {
   ngOnInit() {
     this.postsService.getAllPosts().subscribe({
       next: (data: any) => {
-        this.posts = data;      // Asignamos los posts a la propiedad 'posts'
-        this.isLoading = false; // Cambiamos 'isLoading' a false
+        this.posts = data;      
+        this.isLoading = false; 
         if (!this.posts.length) {
-          this.alertMessage = 'No hay publicaciones disponibles.'; // Mensaje si no hay posts
+          this.alertMessage = 'No hay publicaciones disponibles.'; 
         }
       },
       error: (error) => {
-        this.isLoading = false;  // Cambiamos 'isLoading' a false
-        this.alertMessage = 'Error al cargar las publicaciones.'; // Mensaje de error
+        this.isLoading = false;  
+        this.alertMessage = 'Error al cargar las publicaciones.';
       }
     });
   }
