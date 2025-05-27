@@ -5,35 +5,70 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-new-post',
-  imports: [FormsModule,CommonModule],
+  standalone: true,
+  imports: [FormsModule, CommonModule],
   templateUrl: './new-post.component.html',
-  styleUrl: './new-post.component.css'
+  styleUrls: ['./new-post.component.css']
 })
 export class NewPostComponent {
-  post: any = {};
+  post: any = {
+    title: '',
+    content: '',
+    imgs: '',
+    category_id: null
+  };
+  
   successMessage: string | null = null;
   errorMessage: string | null = null;
-  constructor(private PostService: PostsService) { }
+  private alertTimeout: any;
+
+  constructor(private postService: PostsService) { }
 
   addPost() {
-    this.PostService.createPost(this.post).subscribe(
-      (response) => {
-        this.successMessage = '¡Post agregado exitosamente!';
+    // Limpiamos cualquier alerta previa
+    this.clearAlerts();
+    
+    this.postService.createPost(this.post).subscribe({
+      next: (response) => {
+        this.successMessage = '¡Noticia creada exitosamente!';
         this.resetForm();
+        this.setAlertTimeout('success');
       },
-      (error) => {
-        console.error('Error adding post', error);
-        this.errorMessage = 'Error al agregar el post. Por favor, inténtelo de nuevo.';
+      error: (error) => {
+        console.error('Error al crear noticia', error);
+        this.errorMessage = 'Error al crear la noticia. Por favor, inténtelo de nuevo.';
+        this.setAlertTimeout('error');
       }
-    );
+    });
   }
- 
+
   resetForm() {
     this.post = {
       title: '',
       content: '',
-      imageUrl: '',
-      category_id: 0
+      imgs: null,
+      category_id: null
     };
+  }
+
+  dismissAlert(type: 'success' | 'error') {
+    if (type === 'success') {
+      this.successMessage = null;
+    } else {
+      this.errorMessage = null;
+    }
+    clearTimeout(this.alertTimeout);
+  }
+
+  private setAlertTimeout(type: 'success' | 'error') {
+    this.alertTimeout = setTimeout(() => {
+      this.dismissAlert(type);
+    }, 5000); // Se cierra automáticamente después de 5 segundos
+  }
+
+  private clearAlerts() {
+    this.successMessage = null;
+    this.errorMessage = null;
+    clearTimeout(this.alertTimeout);
   }
 }

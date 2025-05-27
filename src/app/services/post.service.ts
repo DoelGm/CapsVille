@@ -22,4 +22,11 @@ export class PostsService {
   createPost(post: any): Observable<any> {
     return this.http.post<any>(this.apiUrl, post);
   }
+
+  updatePost(post: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${post.id}`, post);
+  }
+  deletePost(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
 }
