@@ -20,7 +20,7 @@ export class UsersTableComponent {
   confirmPassword: string = ''; // Variable faltante añadida
   isEditing: boolean = false;
   p: number = 1;
-  itemsPerPage: number = 14;
+  itemsPerPage: number = 10;
   successMessage: string | null = null;
   errorMessage: string | null = null;
   private alertTimeout: any;

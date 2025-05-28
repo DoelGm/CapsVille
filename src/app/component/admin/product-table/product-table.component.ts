@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ProductService } from '../../../services/product.service';
+import { CategoriesService } from '../../../services/categories.service';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
 
@@ -13,7 +14,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class ProductTableComponent {
   p: number = 1;
-  itemsPerPage: number = 14;
+  itemsPerPage: number = 10;
   products: any[] = [];
   categories: any[] = [];
   productToEdit: any = null;
@@ -23,10 +24,14 @@ export class ProductTableComponent {
   errorMessage: string | null = null;
   private alertTimeout: any;
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private categoriesService: CategoriesService
+  ) { }
 
   ngOnInit() {
     this.loadProducts();
+    this.loadCategories();
   }
 
   loadProducts() {
@@ -45,6 +50,19 @@ export class ProductTableComponent {
     });
   }
 
+  loadCategories() {
+    this.categoriesService.getAllCategories().subscribe({
+      next: (data: any) => {
+        this.categories = data;
+      },
+      error: (error) => {
+        console.error('Error loading categories', error);
+        this.errorMessage = 'Error al cargar las categorías';
+        this.setAlertTimeout('error');
+      }
+    });
+  }
+
   prepareEdit(product: any) {
     this.productToEdit = { ...product };
     this.isEditing = true;
@@ -55,25 +73,29 @@ export class ProductTableComponent {
     this.productToEdit = null;
   }
 
-    updateProduct() {
-      if (this.productToEdit) {
-        this.clearAlerts();
-        // Asumiendo que el servicio espera (id, data)
-        this.productService.updateProduct(this.productToEdit.id, this.productToEdit).subscribe({
-          next: (response) => {
-            this.successMessage = 'Producto actualizado exitosamente';
-            this.setAlertTimeout('success');
-            this.loadProducts();
-            this.isEditing = false;
-          },
-          error: (error) => {
-            console.error('Error updating product', error);
-            this.errorMessage = 'Error al actualizar el producto';
-            this.setAlertTimeout('error');
-          }
-        });
-      }
+  updateProduct() {
+    if (this.productToEdit) {
+      this.clearAlerts();
+      this.productService.updateProduct(this.productToEdit.id, this.productToEdit).subscribe({
+        next: (response) => {
+          this.successMessage = 'Producto actualizado exitosamente';
+          this.setAlertTimeout('success');
+          this.loadProducts();
+          this.isEditing = false;
+        },
+        error: (error) => {
+          console.error('Error updating product', error);
+          this.errorMessage = 'Error al actualizar el producto';
+          this.setAlertTimeout('error');
+        }
+      });
     }
+  }
+
+  calculateDiscount(price: number, discountPrice: number): number {
+    if (!discountPrice || discountPrice <= price) return 0;
+    return Math.round(((discountPrice - price) / price) * 100);
+  }
 
   prepareDelete(product: any) {
     this.productToDelete = product;
@@ -102,7 +124,6 @@ export class ProductTableComponent {
     }
   }
 
-  // Métodos para manejo de alertas
   dismissAlert(type: 'success' | 'error') {
     if (type === 'success') {
       this.successMessage = null;

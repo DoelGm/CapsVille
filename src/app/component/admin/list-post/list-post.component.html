@@ -3,17 +3,18 @@
     <div class="row">
       <div class="col-md-12 p-4 bg-light rounded shadow">
         <h1>Lista de noticias</h1>
-        
-      <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ successMessage }}
-        <button type="button" class="btn-close" (click)="dismissAlert('success')" aria-label="Close"></button>
-      </div>
-      <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ errorMessage }}
-        <button type="button" class="btn-close" (click)="dismissAlert('error')" aria-label="Close"></button>
-      </div>
 
-        <!-- Vista de tabla (se muestra cuando NO estamos editando) -->
+        <!-- Mensajes de éxito o error -->
+        <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ successMessage }}
+          <button type="button" class="btn-close" (click)="dismissAlert('success')" aria-label="Close"></button>
+        </div>
+        <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ errorMessage }}
+          <button type="button" class="btn-close" (click)="dismissAlert('error')" aria-label="Close"></button>
+        </div>
+
+        <!-- Vista de tabla (cuando NO se edita) -->
         <div *ngIf="!isEditing" class="table-responsive rounded mb-3">
           <table class="table table-hover table-borderless align-middle mb-0 bg-white rounded">
             <thead class="table-secondary text-center text-secondary">
@@ -26,7 +27,7 @@
               </tr>
             </thead>
             <tbody class="text-center">
-              <tr *ngFor="let post of list">
+              <tr *ngFor="let post of list | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
                 <td><strong>{{ post.id }}</strong></td>
                 <td>{{ post.title }}</td>
                 <td class="text-truncate" style="max-width: 200px;">{{ post.content }}</td>
@@ -47,30 +48,38 @@
               </tr>
             </tbody>
           </table>
+
+          <!-- Paginación -->
+          <pagination-controls 
+            (pageChange)="p = $event" 
+            class="my-pagination text-center"
+            previousLabel="Anterior"
+            nextLabel="Siguiente">
+          </pagination-controls>
         </div>
 
-        <!-- Formulario de edición (se muestra cuando SÍ estamos editando) -->
+        <!-- Formulario de edición (cuando SÍ se edita) -->
         <div *ngIf="isEditing" class="mt-4 p-4 bg-light rounded">
           <h2>Editar Noticia</h2>
-          
+
           <form #editForm="ngForm" (ngSubmit)="updatePost()">
             <div class="mb-3">
               <label class="form-label">Título</label>
               <input type="text" class="form-control" [(ngModel)]="postToEdit.title" name="title" required>
             </div>
-            
+
             <div class="mb-3">
               <label class="form-label">Contenido</label>
               <textarea class="form-control" rows="5" [(ngModel)]="postToEdit.content" name="content" required></textarea>
             </div>
-            
+
             <div class="mb-3">
               <label class="form-label">URL de la Imagen</label>
-              <input type="url" class="form-control" [(ngModel)]="postToEdit.imgs" name="imgs">
+              <input type="text" [(ngModel)]="postToEdit.imgs" class="form-control" placeholder="URL de la imagen" name="imgs">
               <small *ngIf="postToEdit.imgs" class="text-muted">Vista previa:</small>
               <img *ngIf="postToEdit.imgs" [src]="postToEdit.imgs" class="img-thumbnail mt-2" style="max-height: 100px;">
             </div>
-            
+
             <div class="d-flex gap-2">
               <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">
                 <i class="fas fa-save me-1"></i> Guardar Cambios

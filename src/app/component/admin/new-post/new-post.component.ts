@@ -25,20 +25,26 @@ export class NewPostComponent {
   constructor(private postService: PostsService) { }
 
   addPost() {
-    // Limpiamos cualquier alerta previa
-    this.clearAlerts();
-    
-    this.postService.createPost(this.post).subscribe({
-      next: (response) => {
-        this.successMessage = '¡Noticia creada exitosamente!';
-        this.resetForm();
-        this.setAlertTimeout('success');
-      },
-      error: (error) => {
-        console.error('Error al crear noticia', error);
-        this.errorMessage = 'Error al crear la noticia. Por favor, inténtelo de nuevo.';
-        this.setAlertTimeout('error');
-      }
+  this.clearAlerts();
+
+  // Si hay una URL, conviértela en un arreglo
+  if (this.post.imgs) {
+    this.post.imgs = [this.post.imgs];
+  } else {
+    this.post.imgs = null; // o [], según tu backend
+  }
+
+  this.postService.createPost(this.post).subscribe({
+    next: (response) => {
+      this.successMessage = '¡Noticia creada exitosamente!';
+      this.resetForm();
+      this.setAlertTimeout('success');
+    },
+    error: (error) => {
+      console.error('Error al crear noticia', error);
+      this.errorMessage = 'Error al crear la noticia. Por favor, inténtelo de nuevo.';
+      this.setAlertTimeout('error');
+    }
     });
   }
 
