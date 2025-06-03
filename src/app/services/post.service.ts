@@ -15,6 +15,10 @@ export class PostsService {
     return this.http.get<any[]>(this.apiUrl);
   }
 
+getPostsImgs(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
+  }
+
   getPost(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }

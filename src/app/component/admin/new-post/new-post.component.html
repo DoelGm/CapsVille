@@ -16,7 +16,8 @@
           <button type="button" class="btn-close" (click)="dismissAlert('error')" aria-label="Close"></button>
         </div>
         
-        <form #postForm="ngForm" (ngSubmit)="addPost()">
+        <form #postForm="ngForm" (ngSubmit)="createPost()" enctype="multipart/form-data">
+
           <div class="mb-4">
             <label for="title" class="form-label">Título</label>
             <input
@@ -43,15 +44,17 @@
             ></textarea>
           </div>
 
+          <!-- Campo para subir imágenes -->
           <div class="mb-4">
-            <label for="imgs" class="form-label">Imagen (URL)</label>
+            <label for="imgs" class="form-label">Seleccionar imagen</label>
             <input 
-              type="url"
+              type="file"
               class="form-control"
-              id="imgs"
-              placeholder="URL de la imagen (opcional)"
-              [(ngModel)]="post.imgs"
-              name="imgs"
+              id="link"
+              name="link"
+              (change)="onFileSelected($event)"
+              multiple  
+              accept="image/*"
             />
           </div>
         
@@ -59,7 +62,7 @@
             <button type="submit" [disabled]="postForm.invalid" class="btn btn-primary">
               Crear noticia
             </button>
-          </div>
+          </div> 
         </form>
       </div>
     </div>

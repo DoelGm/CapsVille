@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { PostsService } from '../../../services/post.service';
+import { PostsService } from '../../../services/post.service'; // Asegúrate de importar tu servicio
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-new-post',
@@ -14,27 +15,39 @@ export class NewPostComponent {
   post: any = {
     title: '',
     content: '',
-    imgs: '',
+    imgs: [],
     category_id: null
   };
-  
+
+  selectedFiles: File[] = [];  // Para almacenar los archivos seleccionados
   successMessage: string | null = null;
   errorMessage: string | null = null;
   private alertTimeout: any;
 
-  constructor(private postService: PostsService) { }
+  constructor(
+    private postService: PostsService, // Inyectar el servicio de imágenes
+    private http: HttpClient
+  ) {}
 
-  addPost() {
-  this.clearAlerts();
-
-  // Si hay una URL, conviértela en un arreglo
-  if (this.post.imgs) {
-    this.post.imgs = [this.post.imgs];
-  } else {
-    this.post.imgs = null; // o [], según tu backend
+  // Maneja la selección de archivos (imágenes)
+  onFileSelected(event: any): void {
+    this.selectedFiles = Array.from(event.target.files);  // Almacena los archivos seleccionados
   }
 
-  this.postService.createPost(this.post).subscribe({
+  // Función para crear el post
+  createPost() {
+  this.clearAlerts();
+
+  const formData = new FormData();
+  formData.append('title', this.post.title);
+  formData.append('content', this.post.content);
+
+  // Añadir las imágenes (si existen)
+  this.selectedFiles.forEach(file => {
+    formData.append('link[]', file, file.name);
+  });
+
+  this.http.post('http://localhost:8000/api/posts', formData).subscribe({
     next: (response) => {
       this.successMessage = '¡Noticia creada exitosamente!';
       this.resetForm();
@@ -45,16 +58,18 @@ export class NewPostComponent {
       this.errorMessage = 'Error al crear la noticia. Por favor, inténtelo de nuevo.';
       this.setAlertTimeout('error');
     }
-    });
-  }
+  });
+}
+
 
   resetForm() {
     this.post = {
       title: '',
       content: '',
-      imgs: null,
+      imgs: [],
       category_id: null
     };
+    this.selectedFiles = [];
   }
 
   dismissAlert(type: 'success' | 'error') {
