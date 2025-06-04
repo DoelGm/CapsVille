@@ -1,1 +1,70 @@
-<p>new-post works!</p>
+<section class="mt-4 pt-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 p-4 bg-light rounded shadow">
+        <h1 class="text-start mb-4">Nueva noticia</h1>
+        
+        <!-- Alerta de éxito (se autocierra después de 5 segundos) -->
+        <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ successMessage }}
+          <button type="button" class="btn-close" (click)="dismissAlert('success')" aria-label="Close"></button>
+        </div>
+        
+        <!-- Alerta de error -->
+        <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ errorMessage }}
+          <button type="button" class="btn-close" (click)="dismissAlert('error')" aria-label="Close"></button>
+        </div>
+        
+        <form #postForm="ngForm" (ngSubmit)="createPost()" enctype="multipart/form-data">
+
+          <div class="mb-4">
+            <label for="title" class="form-label">Título</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              placeholder="Título de la noticia"
+              [(ngModel)]="post.title"
+              name="title"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="content" class="form-label">Contenido</label>
+            <textarea
+              class="form-control"
+              id="content"
+              placeholder="Contenido de la noticia"
+              [(ngModel)]="post.content"
+              name="content"
+              required
+              rows="5"
+            ></textarea>
+          </div>
+
+          <!-- Campo para subir imágenes -->
+          <div class="mb-4">
+            <label for="imgs" class="form-label">Seleccionar imagen</label>
+            <input 
+              type="file"
+              class="form-control"
+              id="link"
+              name="link"
+              (change)="onFileSelected($event)"
+              multiple  
+              accept="image/*"
+            />
+          </div>
+        
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="submit" [disabled]="postForm.invalid" class="btn btn-primary">
+              Crear noticia
+            </button>
+          </div> 
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

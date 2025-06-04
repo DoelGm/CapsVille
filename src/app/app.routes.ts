@@ -16,6 +16,7 @@ import { CustumerTableComponent } from './component/admin/custumer-table/custume
 import { NewUserComponent } from './component/admin/new-user/new-user.component';
 import { NewPostComponent } from './component/admin/new-post/new-post.component';
 import { AuthGuard } from './guards/auth.guard';
+import { ListPostComponent } from './component/admin/list-post/list-post.component';
 
 export const routes: Routes = [
   {
@@ -43,6 +44,7 @@ export const routes: Routes = [
       { path: 'new-customer', component: NewCustumerComponent },
       { path: 'new-ticket', component: NewTicketComponent },
       { path: 'new-post', component: NewPostComponent },
+      { path: 'list-post', component: ListPostComponent } // Assuming you want to list posts in the same table as products
     ]
   }
 ];

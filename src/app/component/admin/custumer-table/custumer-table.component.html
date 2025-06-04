@@ -1,45 +1,107 @@
 <section class="mt-4 pt-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 p-4 bg-light rounded shadow">
-                <h1>Lista de Clientes</h1>
-                <div class="table-responsive text-center rounded mb-3">
-                    <table class="table table-hover text-center table-borderless align-middle mb-0 bg-white rounded">
-                        <thead class="table-secondary">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Correo electrónico</th>
-                                <th scope="col">Teléfono</th>
-                                <th scope="col">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let customer of customers | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
-                                <td>{{ customer.id }}</td>
-                                <td>{{ customer.name }}</td>
-                                <td>{{ customer.email }}</td>
-                                <td>{{ customer.phone }}</td>
-                                <td>
-                                    <button class="btn  btn-outline-primary btn-sm me-2" (click)="editCustomer(customer.id)"> 
-                                        <i class="fas fa-pencil-alt me-1"></i> 
-                                        Editar
-                                    </button>
-                                    <button class="btn btn-outline-danger btn-sm" (click)="deleteCustomer(customer.id)">
-                                        <i class="fas fa-trash-alt"></i> Eliminar
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <pagination-controls 
-                    (pageChange)="p = $event" 
-                    class="my-pagination text-center "
-                    previousLabel="Anterior"
-                    nextLabel="Siguiente">
-                </pagination-controls>
-            </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 p-4 bg-light rounded shadow">
+        <h1>Lista de Clientes</h1>
+        
+        <!-- Alertas -->
+        <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+          {{ successMessage }}
+          <button type="button" class="btn-close" (click)="dismissAlert('success')" aria-label="Close"></button>
         </div>
+        <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+          {{ errorMessage }}
+          <button type="button" class="btn-close" (click)="dismissAlert('error')" aria-label="Close"></button>
+        </div>
+
+        <!-- Vista de tabla -->
+        <div *ngIf="!isEditing" class="table-responsive text-center rounded mb-3">
+          <table class="table table-hover align-middle mb-0 bg-white rounded">
+            <thead class="table-secondary">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Correo electrónico</th>
+                <th scope="col">Teléfono</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let customer of customers | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+                <td>{{ customer.id }}</td>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.email }}</td>
+                <td>{{ customer.phone }}</td>
+                <td>
+                  <div class="d-flex justify-content-center gap-2">
+                    <button class="btn btn-outline-primary btn-sm" (click)="prepareEdit(customer)">
+                      <i class="fas fa-pencil-alt me-1"></i> Editar
+                    </button>
+                    <button class="btn btn-outline-danger btn-sm" (click)="prepareDelete(customer)">
+                      <i class="fas fa-trash-alt"></i> Eliminar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Formulario de edición -->
+        <div *ngIf="isEditing" class="mt-4 p-4 bg-light rounded">
+          <h2>Editar Cliente: {{customerToEdit.name}}</h2>
+          
+          <form #editForm="ngForm" (ngSubmit)="updateCustomer()">
+            <div class="mb-4">
+              <label for="editName" class="form-label">Nombre completo</label>
+              <input type="text" class="form-control" id="editName" 
+                     [(ngModel)]="customerToEdit.name" name="name" required>
+            </div>
+            
+            <div class="mb-4">
+              <label for="editPhone" class="form-label">Número de teléfono</label>
+              <input type="tel" class="form-control" minlength="10" id="editPhone" 
+                     [(ngModel)]="customerToEdit.phone" name="phone" required>
+            </div>
+            
+            <div class="mb-4">
+              <label for="editEmail" class="form-label">Correo electrónico</label>
+              <input type="email" class="form-control" id="editEmail" 
+                     [(ngModel)]="customerToEdit.email" name="email" required>
+            </div>
+            
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">
+                <i class="fas fa-save me-1"></i> Guardar Cambios
+              </button>
+              <button type="button" class="btn btn-secondary" (click)="cancelEdit()">
+                <i class="fas fa-times me-1"></i> Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="deleteCustomerModal" tabindex="-1" aria-labelledby="deleteCustomerModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="deleteCustomerModalLabel">Confirmar eliminación</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar al cliente "{{ customerToDelete?.name }}"? Esta acción no se puede deshacer.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()" data-bs-dismiss="modal">
+          <i class="fas fa-trash-alt me-1"></i> Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

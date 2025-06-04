@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
+import { CardNewsComponent } from "../../../component/public/card-news/card-news.component";
 
 @Component({
   selector: 'app-post',
-  imports: [],
+  standalone: true,
+  imports: [CardNewsComponent],
   templateUrl: './post.component.html',
   styleUrl: './post.component.css'
 })
