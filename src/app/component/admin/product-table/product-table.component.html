@@ -1,7 +1,7 @@
 <section class="mt-4 pt-5">
   <div class="container">
     <div class="row">
-      <div class="col-md-12 p-4 bg-light rounded shadow">
+      <div class="col-md-12 col-12 p-4 bg-light rounded shadow">
         <h1>Lista de Productos</h1>
         
         <!-- Alertas -->
@@ -16,7 +16,7 @@
 
         <!-- Vista de tabla -->
         <div *ngIf="!isEditing" class="table-responsive rounded mb-3">
-          <table class="table table-hover table-borderless align-middle mb-0 bg-white rounded">
+           <table class="table table-hover align-middle mb-0 bg-white rounded table-sm">
             <thead class="table-secondary text-center text-secondary">
               <tr>
                 <th>#</th>
@@ -80,7 +80,7 @@
             </div>
 
             <div class="row mb-3">
-              <div class="col-md-3">
+              <div class="col-md-3 col-3 mb-3 mb-md-0">
                 <label class="form-label">Precio</label>
                 <div class="input-group">
                   <span class="input-group-text">$</span>
@@ -88,7 +88,7 @@
                 </div>
               </div>
 
-              <div class="col-md-3">
+              <div class="col-md-3 col-3 mb-3 mb-md-0">
                 <label class="form-label">Precio de Comparación</label>
                 <div class="input-group">
                   <span class="input-group-text">$</span>
@@ -98,13 +98,13 @@
                   {{ calculateDiscount(productToEdit.price, productToEdit.discount) }}% de descuento
                 </div>
               </div>
-              
-              <div class="col-md-3">
+
+              <div class="col-md-3 col-3 mb-3 mb-md-0">
                 <label class="form-label">Stock</label>
                 <input type="number" class="form-control" [(ngModel)]="productToEdit.stock" name="stock" required>
               </div>
 
-              <div class="col-md-3">
+              <div class="col-md-3 col-3 mb-3 mb-md-0">
                 <label class="form-label">Categoría</label>
                 <select class="form-select" [(ngModel)]="productToEdit.category_id" name="category" required>
                   <option value="" disabled>Seleccione categoría</option>

@@ -2,7 +2,7 @@ a{
     background-color: rgb(255, 255, 255);
     text-decoration: none;
     color: #000;
-   padding: 10px;
+    padding: 10px;
     display: block;
     border-radius: 5px;
     margin: 5px 0;
@@ -16,4 +16,24 @@ a:hover{
 
 .accordion-item{
     margin: 10px 0;
+}
+
+@media (max-width: 600px) {
+    a {
+        font-size: 14px;
+        padding: 8px;
+    }
+    .accordion-item {
+        margin: 5px 0;
+    }
+    button{
+        font-size: 14px;
+        padding: 8px;
+    }
+    section{
+        height: 10vh;
+    }
+    .viewPc{
+        display: none;
+    } 
 }
