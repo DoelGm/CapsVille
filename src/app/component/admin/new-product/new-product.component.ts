@@ -3,6 +3,7 @@ import { ProductService } from '../../../services/product.service';
 import { FormsModule } from '@angular/forms';
 import { CategoriesService } from '../../../services/categories.service';
 import { CommonModule } from '@angular/common';
+import { ViewChild, ElementRef } from '@angular/core';
 
 
 @Component({
@@ -12,6 +13,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './new-product.component.css'
 })
 export class NewProductComponent {
+
+  @ViewChild('mainImageInput') mainImageInput!: ElementRef;
+  @ViewChild('secondaryImage1Input') secondaryImage1Input!: ElementRef;
+  @ViewChild('secondaryImage2Input') secondaryImage2Input!: ElementRef;
 
   constructor(private productService: ProductService, private categoriesService: CategoriesService) { }
 
@@ -69,5 +74,10 @@ export class NewProductComponent {
       imageUrl: '',
       stock: null
     };
+
+    // Limpia los inputs de archivo manualmente
+    this.mainImageInput.nativeElement.value = '';
+    this.secondaryImage1Input.nativeElement.value = '';
+    this.secondaryImage2Input.nativeElement.value = '';
   }
 }
