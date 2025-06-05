@@ -5,10 +5,14 @@
         <h1>Lista de Productos</h1>
 
         <!-- Alertas -->
-       
         <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
           {{ errorMessage }}
           <button type="button" class="btn-close" (click)="dismissAlert('error')" aria-label="Close"></button>
+        </div>
+
+        <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ successMessage }}
+          <button type="button" class="btn-close" (click)="dismissAlert('success')" aria-label="Close"></button>
         </div>
 
         <!-- Tabla de productos -->
@@ -50,9 +54,10 @@
               </tr>
             </tbody>
           </table>
+
           <pagination-controls 
             (pageChange)="p = $event"
-            class="my-pagination text-center"
+            class="my-pagination text-center mt-3"
             previousLabel="Anterior"
             nextLabel="Siguiente">
           </pagination-controls>
@@ -72,8 +77,7 @@
             <!-- Descripción -->
             <div class="mb-4">
               <label for="editDescription" class="form-label">Descripción</label>
-              <textarea class="form-control" id="editDescription" rows="3"
-                        [(ngModel)]="productToEdit.description" name="description" required></textarea>
+              <textarea class="form-control" id="editDescription" rows="3" [(ngModel)]="productToEdit.description" name="description" required></textarea>
             </div>
 
             <!-- Imágenes -->
@@ -82,8 +86,7 @@
 
               <div class="mb-3">
                 <label for="editMainImage" class="form-label">Imagen principal*</label>
-                <input class="form-control" type="file" id="editMainImage"
-                       (change)="onImageChange($event, 0)" accept="image/*" required>
+                <input class="form-control" type="file" id="editMainImage" (change)="onImageChange($event, 0)" accept="image/*" required>
                 <small class="text-muted">Imagen que se mostrará como principal</small>
                 <div *ngIf="productToEdit.imageUrls?.[0]" class="mt-2">
                   <img [src]="productToEdit.imageUrls[0]" class="img-thumbnail" style="max-height: 100px;">
@@ -92,8 +95,7 @@
 
               <div class="mb-3">
                 <label for="editSecondaryImage1" class="form-label">Imagen secundaria 1</label>
-                <input class="form-control" type="file" id="editSecondaryImage1"
-                       (change)="onImageChange($event, 1)" accept="image/*">
+                <input class="form-control" type="file" id="editSecondaryImage1" (change)="onImageChange($event, 1)" accept="image/*">
                 <div *ngIf="productToEdit.imageUrls?.[1]" class="mt-2">
                   <img [src]="productToEdit.imageUrls[1]" class="img-thumbnail" style="max-height: 100px;">
                 </div>
@@ -101,15 +103,14 @@
 
               <div class="mb-3">
                 <label for="editSecondaryImage2" class="form-label">Imagen secundaria 2</label>
-                <input class="form-control" type="file" id="editSecondaryImage2"
-                       (change)="onImageChange($event, 2)" accept="image/*">
+                <input class="form-control" type="file" id="editSecondaryImage2" (change)="onImageChange($event, 2)" accept="image/*">
                 <div *ngIf="productToEdit.imageUrls?.[2]" class="mt-2">
                   <img [src]="productToEdit.imageUrls[2]" class="img-thumbnail" style="max-height: 100px;">
                 </div>
               </div>
             </div> 
 
-            <!-- Categoría y eso -->
+            <!-- Categoría -->
             <div class="mb-4">
               <label for="editCategory" class="form-label">Categoría*</label>
               <select class="form-select" id="editCategory" [(ngModel)]="productToEdit.category_id" name="category" required>
@@ -120,26 +121,24 @@
 
             <!-- Stock y Precios -->
             <div class="row">
-              <div class="col-md-3">
+              <div class="col-md-3 mb-3">
                 <label for="editStock" class="form-label">Stock</label>
                 <input type="number" class="form-control" id="editStock" [(ngModel)]="productToEdit.stock" name="stock" min="0" required>
               </div>
 
-              <div class="col-md-3">
+              <div class="col-md-3 mb-3">
                 <label for="editPrice" class="form-label">Precio*</label>
                 <div class="input-group">
                   <span class="input-group-text">$</span>
-                  <input type="number" class="form-control" id="editPrice" [(ngModel)]="productToEdit.price"
-                         name="price" min="0" step="0.01" required>
+                  <input type="number" class="form-control" id="editPrice" [(ngModel)]="productToEdit.price" name="price" min="0" step="0.01" required>
                 </div>
               </div>
 
-              <div class="col-md-3">
+              <div class="col-md-6 mb-3">
                 <label for="editDiscount" class="form-label">Precio de comparación</label>
                 <div class="input-group">
                   <span class="input-group-text">$</span>
-                  <input type="number" class="form-control" id="editDiscount" [(ngModel)]="productToEdit.discount"
-                         name="discount" min="0" step="0.01">
+                  <input type="number" class="form-control" id="editDiscount" [(ngModel)]="productToEdit.discount" name="discount" min="0" step="0.01">
                 </div>
                 <small class="text-muted">Precio original para mostrar descuentos</small>
                 <div *ngIf="productToEdit.discount > productToEdit.price" class="text-danger small mt-1">
@@ -158,10 +157,6 @@
               </button>
             </div>
           </form>
-           <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-          {{ successMessage }}
-          <button type="button" class="btn-close" (click)="dismissAlert('success')" aria-label="Close"></button>
-        </div>
         </div>
       </div>
     </div>

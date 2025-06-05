@@ -5,13 +5,12 @@
         <h1 class="mb-4 text-center text-md-start">Lista de noticias</h1>
 
         <!-- Mensajes -->
-
         <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
           {{ errorMessage }}
           <button type="button" class="btn-close" (click)="dismissAlert('error')" aria-label="Close"></button>
         </div>
 
-        <!-- Tabla de noticias -->
+        <!-- Vista de tabla -->
         <div *ngIf="!isEditing" class="table-responsive mb-3">
           <table class="table table-hover align-middle mb-0 bg-white rounded">
             <thead class="table-secondary text-center text-secondary">
