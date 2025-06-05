@@ -16,7 +16,7 @@
 
         <!-- Vista de tabla -->
         <div *ngIf="!isEditing" class="table-responsive rounded mb-3">
-          <table class="table table-hover table-borderless align-middle mb-0 bg-white rounded">
+          <table class="table table-hover  align-middle mb-0 bg-white rounded">
             <thead class="table-secondary text-center">
               <tr>
                 <th>#</th>
@@ -43,7 +43,7 @@
               </tr>
             </tbody>
           </table>
-
+        </div>
           <!-- Controles de paginación -->
           <pagination-controls 
             (pageChange)="p = $event" 
@@ -51,8 +51,6 @@
             previousLabel="Anterior"
             nextLabel="Siguiente">
           </pagination-controls>
-        </div>
-
         <!-- Formulario de edición -->
         <div *ngIf="isEditing" class="mt-4 p-4 bg-light rounded">
           <h2>Editar Usuario</h2>
