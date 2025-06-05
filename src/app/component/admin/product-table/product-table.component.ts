@@ -67,7 +67,7 @@ export class ProductTableComponent {
     this.productToEdit = { ...product };
     this.isEditing = true;
   }
-
+  
   cancelEdit() {
     this.isEditing = false;
     this.productToEdit = null;
@@ -89,6 +89,24 @@ export class ProductTableComponent {
           this.setAlertTimeout('error');
         }
       });
+    }
+  }
+
+onImageChange( event: Event, index: number): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      // Inicializar el array si es necesario
+      if (!this.productToEdit.images) {
+        this.productToEdit.images = [];
+      }
+      
+      // Asegurarse de que el array tenga suficiente longitud
+      while (this.productToEdit.images.length <= index) {
+        this.productToEdit.images.push(null!);
+      }
+      
+      // Asignar el archivo en la posición correspondiente
+      this.productToEdit.images[index] = input.files[0];
     }
   }
 
@@ -122,7 +140,7 @@ export class ProductTableComponent {
         }
       });
     }
-  }
+  } 
 
   dismissAlert(type: 'success' | 'error') {
     if (type === 'success') {

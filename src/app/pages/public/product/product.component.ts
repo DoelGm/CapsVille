@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
-import { CardProductComponent } from "../../../component/public/card-product/card-product.component";
 import { CommonModule } from '@angular/common';
 import { CategoriesService } from '../../../services/categories.service';
 
 @Component({
   selector: 'app-product',
+  standalone: true,
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.css'],
   imports: [CommonModule]

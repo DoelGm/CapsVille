@@ -19,20 +19,24 @@ export class CardProductComponent {
   
   constructor(private productService: ProductService) {}
 
-  ngOnInit() {
-    this.productService.getAllProducts().subscribe(data => {
+ngOnInit() {
+  this.productService.getAllProducts().subscribe({
+    next: (data) => {
       this.isLoading = false; 
       this.products = data;
       this.allProducts = data;
-
+      console.log('Productos cargados:', this.products); // Agrega este log para verificar los datos
       if (data.length === 0) {
         this.alertMessage = 'No hay productos disponibles';
       }
-    }, error => {
+    },
+    error: (error) => {
       this.isLoading = false;
       this.alertMessage = 'Error al cargar productos';
-    });
-  }
+      console.error('Error al cargar productos:', error); // Log para ver si hubo error
+    }
+  });
+}
 
   filterByCategory(categoryId: number) {
     if (categoryId === 0) {
