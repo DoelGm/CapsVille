@@ -24,29 +24,30 @@
                       [(ngModel)]="product.description" name="description" required></textarea>
           </div>
 
-          <!-- Sección de imágenes separadas -->
-          <div class="mb-4">
-            <label class="form-label">Imágenes del producto</label>
-            
-            <div class="mb-3">
-              <label for="mainImage" class="form-label">Imagen principal*</label>
-              <input class="form-control" type="file" id="mainImage" 
-                     (change)="onImageChange($event, 0)" accept="image/*" required>
-              <small class="text-muted">Imagen que se mostrará como principal</small>
-            </div>
-            
-            <div class="mb-3">
-              <label for="secondaryImage1" class="form-label">Imagen secundaria 1</label>
-              <input class="form-control" type="file" id="secondaryImage1" 
-                     (change)="onImageChange($event, 1)" accept="image/*">
-            </div>
-            
-            <div class="mb-3">
-              <label for="secondaryImage2" class="form-label">Imagen secundaria 2</label>
-              <input class="form-control" type="file" id="secondaryImage2" 
-                     (change)="onImageChange($event, 2)" accept="image/*">
-            </div>
-          </div>
+<div class="row">
+  <label class="form-label mb-3">Imágenes del producto</label>
+
+  <div class="col-md-4 mb-3">
+    <label for="mainImage" class="form-label">Imagen principal*</label>
+    <input #mainImageInput class="form-control" type="file" id="mainImage"
+          (change)="onImageChange($event, 0)" accept="image/*" required>
+    <small class="text-muted">Imagen que se mostrará como principal</small>
+  </div>
+
+  <div class="col-md-4 mb-3">
+    <label for="secondaryImage1" class="form-label">Imagen secundaria 1</label>
+    <input #secondaryImage1Input class="form-control" type="file" id="secondaryImage1"
+          (change)="onImageChange($event, 1)" accept="image/*">
+  </div>
+
+  <div class="col-md-4 mb-3">
+    <label for="secondaryImage2" class="form-label">Imagen secundaria 2</label>
+    <input #secondaryImage2Input class="form-control" type="file" id="secondaryImage2"
+          (change)="onImageChange($event, 2)" accept="image/*">
+  </div>
+</div>
+
+          
 
           <!-- Resto del formulario -->
           <div class="mb-4">
