@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CategoriesService } from '../../../services/categories.service';
 import { CommonModule } from '@angular/common';
 import { ViewChild, ElementRef } from '@angular/core';
-
+ 
 
 @Component({
   selector: 'app-new-product',

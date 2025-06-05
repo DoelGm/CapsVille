@@ -162,4 +162,4 @@ onImageChange( event: Event, index: number): void {
     this.errorMessage = null;
     clearTimeout(this.alertTimeout);
   }
-}
+} 
