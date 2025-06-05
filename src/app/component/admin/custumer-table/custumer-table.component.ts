@@ -17,7 +17,7 @@ export class CustumerTableComponent {
   // Lista de clientes y configuración de paginación
   customers: any[] = [];
   p: number = 1;
-  itemsPerPage: number = 14;
+  itemsPerPage: number = 10;
 
   // Variables para edición
   customerToEdit: any = null;

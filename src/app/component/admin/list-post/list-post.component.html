@@ -15,6 +15,7 @@
         </div>
 
         <!-- Vista de tabla -->
+
         <div *ngIf="!isEditing" class="table-responsive mb-3">
           <table class="table table-hover align-middle mb-0 bg-white rounded">
             <thead class="table-secondary text-center text-secondary">
@@ -32,8 +33,8 @@
                 <td>{{ post.title }}</td>
                 <td class="text-truncate" style="max-width: 150px;">{{ post.content }}</td>
                 <td>
-                  <img *ngIf="post.imgs" [src]="post.imgs" alt="Imagen" class="img-fluid rounded" style="max-width: 60px; max-height: 60px;">
-                  <span *ngIf="!post.imgs" class="text-muted">Sin imagen</span>
+                  <img [src]="post.image_url" alt="Imagen de la noticia" class="img-thumbnail" style="max-width: 80px; max-height: 80px;">
+                  <span *ngIf="!post.image_url" class="text-muted">Sin imagen</span>
                 </td>
                 <td>
                   <div class="d-flex flex-column flex-md-row justify-content-center gap-2">
@@ -59,10 +60,10 @@
         </div>
 
         <!-- Formulario de edición -->
+
         <div *ngIf="isEditing" class="mt-4 p-4 bg-white rounded shadow-sm">
           <h2 class="mb-4 text-center text-md-start">Editar Noticia</h2>
-
-          <form #editForm="ngForm" (ngSubmit)="updatePost()">
+          <form #editForm="ngForm" (ngSubmit)="updatePost()" enctype="multipart/form-data">
             <div class="mb-3">
               <label class="form-label">Título</label>
               <input type="text" class="form-control" [(ngModel)]="postToEdit.title" name="title" required>
@@ -74,12 +75,10 @@
             </div>
 
             <div class="mb-3">
-              <label class="form-label">URL de la Imagen</label>
-              <input type="text" class="form-control" [(ngModel)]="postToEdit.imgs" name="imgs">
-              <div *ngIf="postToEdit.imgs" class="mt-2">
-                <small class="text-muted">Vista previa:</small><br>
-                <img [src]="postToEdit.imgs" class="img-thumbnail mt-1" style="max-height: 100px;">
-              </div>
+              <label class="form-label">Seleccionar nueva imagen (opcional)</label>
+              <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*">
+              <p *ngIf="postToEdit.image_url" class="text-muted mb-2 mt-2">Imagen actual:</p>
+              <img *ngIf="postToEdit.image_url" [src]="postToEdit.image_url" class="img-thumbnail mt-2" style="max-height: 100px;">
             </div>
 
             <div class="d-grid d-md-flex gap-2">

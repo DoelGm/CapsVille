@@ -3,3 +3,17 @@ p{
 }
 .opacity-0 { opacity: 0; }
 .opacity-100 { opacity: 1; }
+
+#carouselExampleIndicators img {
+
+  height: 500px;
+  object-fit: cover;
+  border-radius: 10px;
+
+}
+
+#carouselExampleIndicators {
+  margin-top: 4%;
+  width: 100%;
+  height: 525px;
+}

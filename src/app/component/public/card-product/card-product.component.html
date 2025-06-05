@@ -18,7 +18,7 @@
  <div class="row" *ngIf="!isLoading && products.length > 0">
   <div class="col-md-3" *ngFor="let product of products">
     <div class="card text-bg-dark mt-5 shadow" [routerLink]="['/product', product.id]" style="cursor:pointer;">
-      <img [src]="product.imgs ? product.imgs[0] : 'imgs/default.jpg'" width="100" height="300" class="card-img-top" alt="...">
+      <img [src]="product.image_urls? product.image_urls[0] : 'imgs/default.jpg'" width="100" height="300" class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">{{ product.name }}</h5>
         <p class="card-text text-truncate">{{ product.description }}</p>
@@ -27,5 +27,4 @@
     </div>
   </div>
 </div>
-
 </div>

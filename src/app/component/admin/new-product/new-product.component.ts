@@ -26,10 +26,30 @@ export class NewProductComponent {
 
   successMessage: string | null = null;
 
+  onImageChange(event: Event, index: number): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      // Inicializar el array si es necesario
+      if (!this.product.images) {
+        this.product.images = [];
+      }
+      
+      // Asegurarse de que el array tenga suficiente longitud
+      while (this.product.images.length <= index) {
+        this.product.images.push(null!);
+      }
+      
+      // Asignar el archivo en la posición correspondiente
+      this.product.images[index] = input.files[0];
+    }
+  }
+
+
   addProduct() {
     this.productService.createProduct(this.product).subscribe(
       (response) => {
         this.successMessage = '¡Producto agregado exitosamente!';
+        console.log('Producto agregado:', this.product);
         this.resetForm();
       },
       (error) => {
@@ -43,11 +63,11 @@ export class NewProductComponent {
     this.product = {
       name: '',
       description: '',
-      price: 0,
-      discount: 0,
-      category_id: 0,
+      price: null,
+      discount: null,
+      category_id: null,
       imageUrl: '',
-      stock: 0
+      stock: null
     };
   }
 }
