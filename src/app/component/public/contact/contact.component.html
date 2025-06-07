@@ -7,36 +7,72 @@
     Envíanos un mensaje y te responderemos lo antes posible.
   </p>
 
-  <form action="https://formsubmit.co/TU_CORREO@ejemplo.com" method="POST"
-        class="mx-auto shadow-lg p-4 rounded-4 bg-white" style="max-width: 600px;">
+<!-- Tu formulario (sin cambios grandes, solo quitamos "action") -->
+<!-- Iframe oculto para capturar la respuesta de FormSubmit sin redirección -->
+<iframe name="dummyFrame" style="display: none;"></iframe>
 
-    <!-- Nombre -->
-    <div data-aos="fade-up" class="form-floating mb-4">
-      <input type="text" class="form-control form-control-lg rounded-3" id="nombre" name="nombre"
-             placeholder="Tu nombre completo" required>
-      <label for="nombre">Nombre completo</label>
+<form id="contacto-form"
+      action="https://formsubmit.co/ktbernalgallegos@gmail.com"
+      method="POST"
+      target="dummyFrame"
+      class="mx-auto shadow-lg p-4 rounded-4 bg-white"
+      style="max-width: 600px;">
+
+  <!-- Campos -->
+  <div class="form-floating mb-4">
+    <input type="text" class="form-control form-control-lg rounded-3" name="nombre"
+           placeholder="Tu nombre completo" required>
+    <label>Nombre completo</label>
+  </div>
+
+  <div class="form-floating mb-4">
+    <input type="email" class="form-control form-control-lg rounded-3" name="email"
+           placeholder="correo@ejemplo.com" required>
+    <label>Correo electrónico</label>
+  </div>
+
+  <div class="form-floating mb-4">
+    <textarea class="form-control form-control-lg rounded-3" name="mensaje"
+              placeholder="Escribe tu mensaje aquí..." style="height: 150px;" required></textarea>
+    <label>¿En qué podemos ayudarte?</label>
+  </div>
+
+  <!-- Ocultos -->
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_template" value="table">
+
+  <div class="text-center">
+    <button type="submit" class="btn btn-danger btn-lg px-5 py-2 shadow-sm">Enviar mensaje</button>
+  </div>
+</form>
+
+<!-- Modal Bootstrap -->
+<div class="modal fade" id="exitoModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">¡Mensaje Enviado!</h5>
+      </div>
+      <div class="modal-body">
+        <p>Gracias por contactarnos. Te responderemos pronto. 😊</p>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- Correo -->
-    <div data-aos="fade-up" class="form-floating mb-4">
-      <input type="email" class="form-control form-control-lg rounded-3" id="email" name="email"
-             placeholder="correo@ejemplo.com" required>
-      <label for="email">Correo electrónico</label>
+
+<!-- MODAL de éxito -->
+<div class="modal fade" id="exitoModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">¡Mensaje Enviado!</h5>
+      </div>
+      <div class="modal-body">
+        <p>Gracias por contactarnos. Te responderemos pronto. 😊</p>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- Mensaje -->
-    <div data-aos="fade-up" class="form-floating mb-4">
-      <textarea class="form-control form-control-lg rounded-3" placeholder="Escribe tu mensaje aquí..."
-                id="mensaje" name="mensaje" style="height: 150px;" required></textarea>
-      <label for="mensaje">¿En qué podemos ayudarte?</label>
-    </div>
-
-    <!-- Botón -->
-    <div data-aos="fade-up" class="text-center">
-      <button type="submit" class="btn btn-danger btn-lg px-5 py-2 shadow-sm">Enviar mensaje</button>
-    </div>
-
-    <!-- Evitar captcha de formsubmit -->
-    <input type="hidden" name="_captcha" value="false">
-  </form>
 </section>

@@ -82,7 +82,7 @@ export class ProductService {
 
     formData.append('_method', 'PUT'); // Para Laravel si no usas método PUT real
 
-    return this.http.post(`${this.apiUrl}/${id}`, formData, { headers: this.getAuthHeaders() });
+    return this.http.post(`${this.apiUrl}/${id}/$`, formData, { headers: this.getAuthHeaders() });
   }
 
   deleteProduct(id: number): Observable<any> {
