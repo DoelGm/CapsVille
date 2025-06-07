@@ -27,7 +27,7 @@ export class ProductService {
     return new HttpHeaders({
       'Authorization': token ? `Bearer ${token}` : ''
     });
-  }  
+  }
 
   getAllProducts(): Observable<any> {
     return this.http.get(this.apiUrl);
@@ -88,4 +88,8 @@ export class ProductService {
   deleteProduct(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
+  getProductsByCategory(categoryId: number): Observable<any> {
+  return this.http.get(`${this.apiUrl}/category/${categoryId}`);
+  }
+
 }
