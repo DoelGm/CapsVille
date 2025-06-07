@@ -1,4 +1,13 @@
-.card:hover{
-    transform: scale(1.01);
-    transition: all 0.3s ease-in-out;
+.card-img-top {
+      object-fit: contain;
+    }
+.card {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra más sutil */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
+.card:hover {
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Sombra más visible */
+      cursor: pointer;
+      transition: ease-in-out 0.3s; /* Suaviza la transición */
+      transform: scale(1.02); /* Efecto de zoom al pasar el ratón */
+    }

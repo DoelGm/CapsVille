@@ -19,7 +19,7 @@ export class CardNewsComponent implements OnInit {
   constructor(private postsService: PostsService, private imgsService: ImageService) {}
 
   ngOnInit() {
-    this.postsService.getAllPosts().subscribe({
+    this.postsService.getPosts().subscribe({
       next: (data: any) => {
         this.posts = data; 
         console.log('Publicaciones cargadas:', this.posts);     

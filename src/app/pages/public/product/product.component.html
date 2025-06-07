@@ -1,118 +1,152 @@
-<section class="mt-5 p-5 bg-danger-subtle">
+<section class="mt-5 mt-md-5 background-section p-3 p-md-5">
     <div class="container">
-        <div class="row">
-            <div class="col-6 bg-dark rounded-start-5 p-5 shadow">
+        <div class="row flex-column flex-md-row">
+            <!-- Columna de imágenes - Cambia a full width en móvil -->
+            <div class="col-12 col-md-6 mt-lg-2 mt-5 bg-dark rounded-bottom-0 rounded-md-bottom-5 p-3 p-md-5 shadow">
                 <div id="carouselExampleIndicators" class="carousel slide">
                     <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        <button
+                            *ngFor="let url of product.image_urls; let i = index"
+                            type="button"
+                            [attr.data-bs-target]="'#carouselExampleIndicators'"
+                            [attr.data-bs-slide-to]="i"
+                            [class.active]="i === 0"
+                            [attr.aria-current]="i === 0 ? 'true' : null"
+                            [attr.aria-label]="'Slide ' + (i + 1)">
+                        </button>
                     </div>
+
                     <div class="carousel-inner">
-                        <div class="carousel-item active">
-                        <img src="imgs/imagenPrueba.webp" class="d-block w-100" alt="...">
-                        </div>
-                        <div class="carousel-item">
-                        <img src="..." class="d-block w-100" alt="...">
-                        </div>
-                        <div class="carousel-item">
-                        <img src="..." class="d-block w-100" alt="...">
+                        <div
+                            *ngFor="let url of product.image_urls; let i = index"
+                            class="carousel-item"
+                            [class.active]="i === 0">
+                            <img [src]="url" class="d-block w-100 img-fluid" alt="Imagen del producto {{product.id}}">
                         </div>
                     </div>
+
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
+                        <span class="visually-hidden">Anterior</span>
                     </button>
                     <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
+                        <span class="visually-hidden">Siguiente</span>
                     </button>
                 </div>
             </div>
-            <div class="col-6 bg-black rounded-end-5  p-5 text-light shadow">
-               
-                <h1>{{product.name}}</h1>
-                 <!-- placeholders -->
-                    <h1 *ngIf="isLoading===true" class="placeholder-glow">
-                        <span class="placeholder col-12"></span>
-                    </h1>
-                 <!-- placeholders end-->
-                <div class="row">
+
+            <!-- Columna de detalles - Cambia a full width en móvil -->
+            <div class="col-12 col-md-6 mt-lg-2 bg-black rounded-md-end-5 rounded-top-0 rounded-md-top-5 p-3 p-md-5 text-light shadow">
+                <h1 class="fs-3 fs-md-1">{{product.name}}</h1>
+
+                <!-- placeholders -->
+                <h1 *ngIf="isLoading===true" class="placeholder-glow">
+                    <span class="placeholder col-12"></span>
+                </h1>
+
+                <div class="row mt-3">
                     <div class="col-md-6">
-                       <p class="fw-light fs-4 mt-3" [class.opacity-0]="isLoading" [class.opacity-100]="!isLoading" style="transition: opacity 0.3s ease">
-                            ${{ product.price }}
-                       </p>
-                         <!-- placeholders -->
-                            <p *ngIf="isLoading" class="placeholder-glow mt-3" style="height: 24px">
-                                <span class="placeholder col-4"></span>
-                            </p>
-                         <!-- placeholders end-->
-                    </div>
-                    <div class="col-md-6">
-                        <p [class.opacity-0]="isLoading" [class.opacity-100]="!isLoading" style="transition: opacity 0.3s ease" class="fw-light text-end fs-5 mt-3">Iva incluido.</p>
-                         <!-- placeholders -->
-                            <p *ngIf="isLoading===true" class="placeholder-glow text-end">
-                                <span class="placeholder col-5"></span>
-                            </p>
-                         <!-- placeholders end-->
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <p *ngIf="product.category_id === category.id" class="mt-3 fs-2">{{category.name}}</p>
-                            <!-- placeholders -->
-                                <p *ngIf="isLoading===true" class="placeholder-glow  mt-3 fs-2">
-                                    <span class="placeholder col-5"></span>
+                        <div class="row align-items-center">
+                            <div class="col-6 col-md-4">
+                                <p class="fw-light fs-5 fs-md-4" [class.opacity-0]="isLoading" [class.opacity-100]="!isLoading">
+                                    ${{ product.price }}
                                 </p>
-                            <!-- placeholders end-->
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <p class="fw-light text-danger text-decoration-line-through fs-6 fs-md-4" [class.opacity-0]="isLoading" [class.opacity-100]="!isLoading">
+                                    ${{ product.discount }}
+                                </p>
+                            </div>
+                        </div>
+                        <!-- placeholders -->
+                        <p *ngIf="isLoading" class="placeholder-glow mt-3" style="height: 24px">
+                            <span class="placeholder col-4"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p [class.opacity-0]="isLoading" [class.opacity-100]="!isLoading" class="fw-light text-end fs-6 fs-md-5 mt-3 mt-md-0">
+                            Iva incluido.
+                        </p>
+                        <!-- placeholders -->
+                        <p *ngIf="isLoading===true" class="placeholder-glow text-end">
+                            <span class="placeholder col-5"></span>
+                        </p>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <button  *ngIf="!isLoading" class="btn btn-success btn-lg mb-4 w-100">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 20">
-                            <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                </svg> Contactanos por whatsapp
+
+                <!-- Resto del contenido... (mantén la misma estructura pero ajusta las clases fs-*) -->
+
+                <!-- Botón de WhatsApp -->
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <button *ngIf="!isLoading" class="btn btn-success btn-lg w-100 py-2 py-md-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-whatsapp me-2" viewBox="0 0 16 20">
+                                <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
+                            </svg>
+                            <span class="d-none d-md-inline">Contáctanos por WhatsApp</span>
+                            <span class="d-inline d-md-none">WhatsApp</span>
                         </button>
                         <!-- placeholders -->
-                            <a *ngIf="isLoading" class="btn btn-success disabled placeholder col-12" aria-disabled="true"></a>
-                        <!-- placeholders end-->
+                        <a *ngIf="isLoading" class="btn btn-success disabled placeholder col-12 py-3" aria-disabled="true"></a>
                     </div>
                 </div>
-                
-                <div class="row">
-                    <div class="col-md-12">
-                        <p *ngIf="!isLoading"  class="mt-3 fs-6 fw-bolder">Descripción:</p>
-                         <!-- placeholders -->
-                            <p *ngIf="isLoading"  class="placeholder-glow">
-                                <span class="placeholder col-12"></span>
-                            </p>
-                         <!-- placeholders end-->
-                       <p class="mt-3 lh-base">{{product.description}}</p>
-                        <!-- placeholders -->
-                            <p *ngIf="isLoading===true" class="placeholder-glow">
-                                <span class="placeholder col-12"></span>
-                            </p>
-                            <p *ngIf="isLoading===true" class="placeholder-glow">
-                                <span class="placeholder col-12"></span>
-                            </p>
-                            <p *ngIf="isLoading===true" class="placeholder-glow">
-                                <span class="placeholder col-12"></span>
-                            </p>
-                            <p *ngIf="isLoading===true" class="placeholder-glow">
-                                <span class="placeholder col-12"></span>
-                            </p>
-                        <!-- placeholders end-->
+
+                <!-- Descripción -->
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <p *ngIf="!isLoading" class="fs-5 fs-md-6 fw-bolder">Descripción:</p>
+                        <p *ngIf="isLoading" class="placeholder-glow">
+                            <span class="placeholder col-12"></span>
+                        </p>
+                        <p class="mt-2 lh-base fs-6">{{product.description}}</p>
                     </div>
                 </div>
-                
-                <p class="fs-6 fw-bolder">Mayoreo:</p>
-                 <ul>
-                    <li>3 piezas originales $2850</li>
-                    <li>5 piezas originales $2850</li>
-                    <li>10 piezas originales $2850</li>
-                 </ul>
+
+                <!-- Mayoreo -->
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <p class="fs-5 fs-md-6 fw-bolder">Mayoreo:</p>
+                        <ul class="fs-6">
+                            <li>3 piezas originales $2850</li>
+                            <li>5 piezas originales $2850</li>
+                            <li>10 piezas originales $2850</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+</section>
+<section class="p-5 background-section">
+  <div class="container">
+    <h2 class="mb-4">Productos Similares</h2>
+
+    <div *ngIf="similarProducts && similarProducts.length > 0 && !isLoading">
+      <owl-carousel-o [options]="customOptions">
+        <ng-container *ngFor="let product of similarProducts">
+          <ng-template carouselSlide>
+            <div class="card rounded-4 m-2 overflow-hidden text-bg-light"
+                 (click)="navigateToProduct(product.id)"
+                 style="cursor: pointer; height: 100%;">
+              <img *ngIf="product.image_urls?.length > 0"
+                   [src]="product.image_urls[0]"
+                   class="card-img-top"
+                   alt="{{ product.name }}"
+                   style="height: 200px; object-fit: cover;">
+              <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">${{ product.price }}</p>
+              </div>
+            </div>
+          </ng-template>
+        </ng-container>
+      </owl-carousel-o>
+    </div>
+
+    <div *ngIf="similarProducts && similarProducts.length === 0 && !isLoading"
+         class="alert alert-info">
+      No hay productos similares disponibles.
+    </div>
+  </div>
 </section>

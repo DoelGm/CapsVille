@@ -5,10 +5,6 @@
         <h1>Lista de Clientes</h1>
         
         <!-- Alertas -->
-        <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show mb-3" role="alert">
-          {{ successMessage }}
-          <button type="button" class="btn-close" (click)="dismissAlert('success')" aria-label="Close"></button>
-        </div>
         <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
           {{ errorMessage }}
           <button type="button" class="btn-close" (click)="dismissAlert('error')" aria-label="Close"></button>
@@ -45,6 +41,14 @@
               </tr>
             </tbody>
           </table>
+          <div class="p-3 mt-3">
+            <pagination-controls
+            (pageChange)="p = $event"
+            class="my-pagination text-center mt-3"
+            previousLabel="Anterior"
+            nextLabel="Siguiente">
+          </pagination-controls>
+          </div>
         </div>
 
         <!-- Formulario de edición -->

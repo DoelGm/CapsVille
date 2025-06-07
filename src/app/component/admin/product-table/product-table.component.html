@@ -1,28 +1,30 @@
 <section class="mt-4 pt-5">
   <div class="container">
     <div class="row">
-      <div class="col-md-12 col-12 p-4 bg-light rounded shadow">
+      <div class="col-12 p-4 bg-light rounded shadow">
         <h1>Lista de Productos</h1>
-        
+
         <!-- Alertas -->
-        <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-          {{ successMessage }}
-          <button type="button" class="btn-close" (click)="dismissAlert('success')" aria-label="Close"></button>
-        </div>
         <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
           {{ errorMessage }}
           <button type="button" class="btn-close" (click)="dismissAlert('error')" aria-label="Close"></button>
         </div>
 
-        <!-- Vista de tabla -->
+        <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ successMessage }}
+          <button type="button" class="btn-close" (click)="dismissAlert('success')" aria-label="Close"></button>
+        </div>
+
+        <!-- Tabla de productos -->
         <div *ngIf="!isEditing" class="table-responsive rounded mb-3">
-           <table class="table table-hover align-middle mb-0 bg-white rounded table-sm">
+          <table class="table table-hover align-middle mb-0 bg-white rounded table-sm">
             <thead class="table-secondary text-center text-secondary">
               <tr>
                 <th>#</th>
                 <th>Nombre</th>
                 <th>Descripción</th>
                 <th>Precio</th>
+                <th>Precio a comprar</th>
                 <th>Stock</th>
                 <th>Acciones</th>
               </tr>
@@ -32,12 +34,8 @@
                 <td><strong>{{ product.id }}</strong></td>
                 <td>{{ product.name }}</td>
                 <td class="text-truncate" style="max-width: 200px;">{{ product.description }}</td>
-                <td>
-                  <span class="badge bg-success">{{ product.price | currency }}</span>
-                  <span *ngIf="product.discount > product.price" class="text-danger ms-2">
-                    {{ calculateDiscount(product.price, product.discount) }}% OFF
-                  </span>
-                </td>
+                <td><span class="badge bg-success">{{ product.price | currency }}</span></td>
+                <td><span class="badge bg-success">{{ product.discount | currency }}</span></td>
                 <td>
                   <span [class]="product.stock > 0 ? 'text-success' : 'text-danger'">
                     {{ product.stock }}
@@ -56,66 +54,140 @@
               </tr>
             </tbody>
           </table>
+
+          <div class="p-3 mt-3">
+            <pagination-controls
+            (pageChange)="p = $event"
+            class="my-pagination text-center mt-3"
+            previousLabel="Anterior"
+            nextLabel="Siguiente">
+          </pagination-controls>
+          </div>
         </div>
 
         <!-- Formulario de edición -->
         <div *ngIf="isEditing" class="mt-4 p-4 bg-light rounded">
-          <h2>Editar Producto: {{productToEdit.name}}</h2>
-          
-          <form #editForm="ngForm" (ngSubmit)="updateProduct()">
-            <div class="mb-3">
-              <label class="form-label">Nombre</label>
-              <input type="text" class="form-control" [(ngModel)]="productToEdit.name" name="name" required>
-            </div>
-            
-            <div class="mb-3">
-              <label class="form-label">Descripción</label>
-              <textarea class="form-control" rows="3" [(ngModel)]="productToEdit.description" name="description" required></textarea>
-            </div>
-            
-            <div class="mb-3">
-              <label class="form-label">Imagen (URL)</label>
-              <input type="url" class="form-control" [(ngModel)]="productToEdit.imageUrl" name="imageUrl">
-              <img *ngIf="productToEdit.imageUrl" [src]="productToEdit.imageUrl" class="img-thumbnail mt-2" style="max-height: 100px;">
+          <h2>Editar Producto: {{ productToEdit.name }}</h2>
+
+          <form (ngSubmit)="updateProduct()" #editForm="ngForm" enctype="multipart/form-data">
+            <!-- Nombre -->
+            <div class="mb-4">
+              <label for="editName" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="editName" [(ngModel)]="productToEdit.name" name="name" required>
             </div>
 
-            <div class="row mb-3">
-              <div class="col-md-3 col-3 mb-3 mb-md-0">
-                <label class="form-label">Precio</label>
+            <!-- Descripción -->
+            <div class="mb-4">
+              <label for="editDescription" class="form-label">Descripción</label>
+              <textarea class="form-control" id="editDescription" rows="3" [(ngModel)]="productToEdit.description" name="description" required></textarea>
+            </div>
+
+<div class="row">
+  <label class="form-label mb-3">Imágenes del producto</label>
+
+  <!-- Imagen principal -->
+  <div class="col-md-4 mb-3">
+    <label for="mainImage" class="form-label">Imagen principal*</label>
+    <input #mainImageInput class="form-control" type="file" id="mainImage"
+          (change)="onImageChange($event, 0)" accept="image/*">
+    <small class="text-muted">Deja el campo vacío si no deseas cambiar la imagen</small>
+
+    <div class="mt-2 text-center">
+      <ng-container *ngIf="productToEdit.image_urls?.[0]; else noMainImage">
+        <img [src]="productToEdit.image_urls[0]" class="img-thumbnail shadow" style="max-height: 100px;">
+                <div class="pt-2 mt-1 ">
+          <small class="text-muted">Imagen previa</small>
+        </div>
+      </ng-container>
+      <ng-template #noMainImage>
+        <span class="text-muted">Sin imagen</span>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Imagen secundaria 1 -->
+  <div class="col-md-4 mb-3">
+    <label for="secondaryImage1" class="form-label">Imagen secundaria 1</label>
+    <input #secondaryImage1Input class="form-control" type="file" id="secondaryImage1"
+          (change)="onImageChange($event, 1)" accept="image/*">
+    <small class="text-muted">Deja el campo vacío si no deseas cambiar la imagen</small>
+
+    <div class="mt-2 text-center">
+      <ng-container *ngIf="productToEdit.image_urls?.[1]; else noSecondary1">
+        <img [src]="productToEdit.image_urls[1]" class="img-thumbnail shadow" style="max-height: 100px;">
+                <div class="pt-2 mt-1 ">
+          <small class="text-muted">Imagen previa</small>
+        </div>
+      </ng-container>
+      <ng-template #noSecondary1>
+        <span class="text-muted">Sin imagen</span>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Imagen secundaria 2 -->
+  <div class="col-md-4 mb-3">
+    <label for="secondaryImage2" class="form-label">Imagen secundaria 2</label>
+    <input #secondaryImage2Input class="form-control" type="file" id="secondaryImage2"
+          (change)="onImageChange($event, 2)" accept="image/*">
+    <small class="text-muted">Deja el campo vacío si no deseas cambiar la imagen</small>
+
+    <div class="mt-2 text-center">
+      <ng-container *ngIf="productToEdit.image_urls?.[2]; else noSecondary2">
+        <img [src]="productToEdit.image_urls[2]" class="img-thumbnail shadow" style="max-height: 100px;">
+        <div class="pt-2 mt-1 ">
+          <small class="text-muted">Imagen previa</small>
+        </div>
+      </ng-container>
+
+
+
+      <ng-template #noSecondary2>
+        <span class="text-muted">Sin imagen</span>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+            <!-- Categoría -->
+            <div class="mb-4">
+              <label for="editCategory" class="form-label">Categoría*</label>
+              <select class="form-select" id="editCategory" [(ngModel)]="productToEdit.category_id" name="category" required>
+                <option value="" disabled selected>Selecciona una categoría</option>
+                <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+              </select>
+            </div>
+
+            <!-- Stock y Precios -->
+            <div class="row">
+              <div class="col-md-3 mb-3">
+                <label for="editStock" class="form-label">Stock</label>
+                <input type="number" class="form-control" id="editStock" [(ngModel)]="productToEdit.stock" name="stock" min="0" required>
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label for="editPrice" class="form-label">Precio*</label>
                 <div class="input-group">
                   <span class="input-group-text">$</span>
-                  <input type="number" step="0.01" class="form-control" [(ngModel)]="productToEdit.price" name="price" required>
+                  <input type="number" class="form-control" id="editPrice" [(ngModel)]="productToEdit.price" name="price" min="0" step="0.01" required>
                 </div>
               </div>
 
-              <div class="col-md-3 col-3 mb-3 mb-md-0">
-                <label class="form-label">Precio de Comparación</label>
+              <div class="col-md-6 mb-3">
+                <label for="editDiscount" class="form-label">Precio de comparación</label>
                 <div class="input-group">
                   <span class="input-group-text">$</span>
-                  <input type="number" step="0.01" class="form-control" [(ngModel)]="productToEdit.discount" name="discount">
+                  <input type="number" class="form-control" id="editDiscount" [(ngModel)]="productToEdit.discount" name="discount" min="0" step="0.01">
                 </div>
+                <small class="text-muted">Precio original para mostrar descuentos</small>
                 <div *ngIf="productToEdit.discount > productToEdit.price" class="text-danger small mt-1">
                   {{ calculateDiscount(productToEdit.price, productToEdit.discount) }}% de descuento
                 </div>
               </div>
-
-              <div class="col-md-3 col-3 mb-3 mb-md-0">
-                <label class="form-label">Stock</label>
-                <input type="number" class="form-control" [(ngModel)]="productToEdit.stock" name="stock" required>
-              </div>
-
-              <div class="col-md-3 col-3 mb-3 mb-md-0">
-                <label class="form-label">Categoría</label>
-                <select class="form-select" [(ngModel)]="productToEdit.category_id" name="category" required>
-                  <option value="" disabled>Seleccione categoría</option>
-                  <option *ngFor="let category of categories" [value]="category.id">
-                    {{ category.name }}
-                  </option>
-                </select>
-              </div>
             </div>
-            
-            <div class="d-flex gap-2">
+
+            <!-- Botones -->
+            <div class="d-flex gap-2 mt-4">
               <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">
                 <i class="fas fa-save me-1"></i> Guardar Cambios
               </button>

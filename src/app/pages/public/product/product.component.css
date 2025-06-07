@@ -1,5 +1,51 @@
 p{
     text-align: justify;
 }
+.background-section{
+   background-color: #b50000;
+   color : white;
+}
 .opacity-0 { opacity: 0; }
 .opacity-100 { opacity: 1; }
+
+#carouselExampleIndicators img {
+
+  height: 500px;
+  object-fit: cover;
+  border-radius: 10px;
+
+}
+
+#carouselExampleIndicators {
+  margin-top: 4%;
+  width: 100%;
+  height: 525px;
+}
+/* En tu archivo CSS */
+owl-carousel-o {
+  display: block;
+}
+
+.owl-carousel .owl-item {
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-img-top {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .card-img-top {
+    height: 150px; /* Ajusta la altura de la imagen en pantallas pequeñas */
+
+  }
+}
