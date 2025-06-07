@@ -41,12 +41,14 @@
               </tr>
             </tbody>
           </table>
-            <pagination-controls 
-            (pageChange)="p = $event" 
-            class="my-pagination text-center"
+          <div class="p-3 mt-3">
+            <pagination-controls
+            (pageChange)="p = $event"
+            class="my-pagination text-center mt-3"
             previousLabel="Anterior"
             nextLabel="Siguiente">
           </pagination-controls>
+          </div>
         </div>
 
         <!-- Formulario de edición -->
