@@ -34,7 +34,7 @@ export class ProductService {
   }
 
   getProduct(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`);
+    return this.http.get(`${this.apiUrl}/${id}/images`);
   }
 
   createProduct(product: Product): Observable<any> {
@@ -47,14 +47,19 @@ export class ProductService {
     if (product.discount !== undefined) formData.append('discount', product.discount.toString());
     if (product.stock !== undefined) formData.append('stock', product.stock.toString());
 
-    if (product.images && product.images.length > 0) {
-      product.images.slice(0, 3).forEach(image => {
-        formData.append('images[]', image);
-      });
-    }
-
     return this.http.post(this.apiUrl, formData, { headers: this.getAuthHeaders() });
   }
+    uploadImages(images: File[], productId: number) {
+      const formData = new FormData();
+      images.forEach((file, index) => {
+        formData.append(`images[]`, file);
+      });
+      return this.http.post(`${this.apiUrl}/${productId}/images`, formData);
+    }
+    getImagesProducts(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/images`);
+  }
+
 
   updateProduct(id: number, product: Product): Observable<any> {
     const formData = new FormData();

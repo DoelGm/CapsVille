@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-card-product',
   standalone: true,
-  imports: [CommonModule, RouterLink], 
+  imports: [CommonModule, RouterLink],
   templateUrl: './card-product.component.html',
   styleUrls: ['./card-product.component.css']
 })
@@ -16,16 +16,20 @@ export class CardProductComponent {
   allProducts: any[] = [];
   alertMessage: string = '';
   isLoading: boolean = true;
-  
+
   constructor(private productService: ProductService) {}
 
 ngOnInit() {
-  this.productService.getAllProducts().subscribe({
+  this.productService.getImagesProducts().subscribe({
     next: (data) => {
-      this.isLoading = false; 
+      this.isLoading = false;
       this.products = data;
       this.allProducts = data;
-      console.log('Productos cargados:', this.products); // Agrega este log para verificar los datos
+       this.products.forEach(product => {
+        product.image_urls = product.images.map((img: any) => img.cloudinary_url);
+        console.log(`Producto ID ${product.id} tiene imágenes:`, product.image_urls);
+      });
+      console.log('Imágenes cargadas:', this.products)
       if (data.length === 0) {
         this.alertMessage = 'No hay productos disponibles';
       }
@@ -33,10 +37,11 @@ ngOnInit() {
     error: (error) => {
       this.isLoading = false;
       this.alertMessage = 'Error al cargar productos';
-      console.error('Error al cargar productos:', error); // Log para ver si hubo error
+      console.error('Error al cargar productos:', error);
     }
   });
 }
+
 
   filterByCategory(categoryId: number) {
     if (categoryId === 0) {

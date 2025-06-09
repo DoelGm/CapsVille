@@ -5,25 +5,26 @@
             <div class="col-12 col-md-6 mt-lg-2 mt-5 bg-dark rounded-bottom-0 rounded-md-bottom-5 p-3 p-md-5 shadow">
                 <div id="carouselExampleIndicators" class="carousel slide">
                     <div class="carousel-indicators">
-                        <button
-                            *ngFor="let url of product.image_urls; let i = index"
-                            type="button"
-                            [attr.data-bs-target]="'#carouselExampleIndicators'"
-                            [attr.data-bs-slide-to]="i"
-                            [class.active]="i === 0"
-                            [attr.aria-current]="i === 0 ? 'true' : null"
-                            [attr.aria-label]="'Slide ' + (i + 1)">
-                        </button>
+                      <button
+                        *ngFor="let img of product.images; let i = index"
+                        type="button"
+                        [attr.data-bs-target]="'#carouselExampleIndicators'"
+                        [attr.data-bs-slide-to]="i"
+                        [class.active]="i === 0"
+                        [attr.aria-current]="i === 0 ? 'true' : null"
+                        [attr.aria-label]="'Slide ' + (i + 1)">
+                      </button>
                     </div>
 
                     <div class="carousel-inner">
-                        <div
-                            *ngFor="let url of product.image_urls; let i = index"
-                            class="carousel-item"
-                            [class.active]="i === 0">
-                            <img [src]="url" class="d-block w-100 img-fluid" alt="Imagen del producto {{product.id}}">
-                        </div>
+                      <div
+                        *ngFor="let img of product.images; let i = index"
+                        class="carousel-item"
+                        [class.active]="i === 0">
+                        <img [src]="img.cloudinary_url" class="d-block w-100 img-fluid" alt="Imagen del producto {{product.id}}">
+                      </div>
                     </div>
+
 
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -129,11 +130,12 @@
             <div class="card rounded-4 m-2 overflow-hidden text-bg-light"
                  (click)="navigateToProduct(product.id)"
                  style="cursor: pointer; height: 100%;">
-              <img *ngIf="product.image_urls?.length > 0"
-                   [src]="product.image_urls[0]"
-                   class="card-img-top"
-                   alt="{{ product.name }}"
-                   style="height: 200px; object-fit: cover;">
+            <img *ngIf="product.images?.length > 0"
+                  [src]="product.images[0]?.cloudinary_url || '/imgs/default.jpg'"
+                  class="card-img-top"
+                  alt="{{ product.name }}"
+                  style="height: 200px; object-fit: cover;">
+
               <div class="card-body">
                 <h5 class="card-title">{{ product.name }}</h5>
                 <p class="card-text">${{ product.price }}</p>
