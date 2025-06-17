@@ -43,8 +43,7 @@ export class ProductTableComponent {
     this.productService.getAllProducts().subscribe({
       next: (data: any) => {
         this.products = data;
-        this.successMessage = 'Productos cargados exitosamente';
-        this.setAlertTimeout('success');
+  
       },
       error: (error) => {
         console.error('Error loading products', error);

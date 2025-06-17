@@ -21,6 +21,7 @@ export class ListPostComponent {
   errorMessage: string | null = null;
   postToDelete: any = null;
   postToEdit: any = null;
+  deleteModalInstance: any;
   isEditing: boolean = false;
   private alertTimeout: any;
 
@@ -94,23 +95,36 @@ export class ListPostComponent {
   }
 
   // Función para preparar el borrado de un post
-  prepareDelete(post: any) {
-    this.postToDelete = post;
+  prepareDelete(product: any) {
+  this.postToDelete = product;
+  const modal = document.getElementById('deleteModal');
+  if (modal) {
+    // @ts-ignore
+    this.deleteModalInstance = new bootstrap.Modal(modal);
+    this.deleteModalInstance.show();
   }
+}
 
   // Confirmar el borrado de un post
   confirmDelete() {
-    this.postService.deletePost(this.postToDelete.id).subscribe({
-      next: (response) => {
-        this.successMessage = 'Post eliminado con éxito';
-        this.loadPosts(); // Recargamos los posts después de eliminar
-        this.postToDelete = null;
-      },
-      error: (error) => {
-        this.errorMessage = 'Hubo un error al eliminar el post.';
-        console.error('Error:', error);
-      }
-    });
+    if (this.postToDelete) {
+      this.postService.deletePost(this.postToDelete.id).subscribe({
+        next: (response) => {
+          this.successMessage = 'Post eliminado con éxito';
+          console.log('Post eliminado:', this.postToDelete);
+          this.loadPosts(); // Recargar lista
+          this.postToDelete = null; // Limpiar post a eliminar
+
+           if (this.deleteModalInstance) {
+          this.deleteModalInstance.hide();
+        }
+        },
+        error: (error) => {
+          this.errorMessage = 'Hubo un error al eliminar el post.';
+          console.error('Error:', error);
+        }
+      });
+    }
   }
 
   // Función para cerrar las alertas de error o éxito
