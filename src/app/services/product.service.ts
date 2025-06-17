@@ -62,6 +62,7 @@ export class ProductService {
   }
 
 
+
 updateProduct(id: number, data: FormData): Observable<any> {
   return this.http.post(`${this.apiUrl}/${id}?_method=PUT`, data);
 }

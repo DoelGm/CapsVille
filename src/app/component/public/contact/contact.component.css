@@ -11,3 +11,9 @@ textarea:focus {
   transform: scale(1.02);
   transition: all 0.2s ease-in-out;
 }
+
+button {
+  background-color: #AE0018;
+  color: white;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.8); /* Brillo blanco sutil */
+}
