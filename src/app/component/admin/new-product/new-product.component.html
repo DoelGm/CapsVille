@@ -20,10 +20,16 @@
 
           <div class="mb-4">
             <label for="description" class="form-label">Descripción</label>
-            <textarea class="form-control" id="description" rows="3"
-                      [(ngModel)]="product.description" name="description" required></textarea>
+            <quill-editor
+              [(ngModel)]="product.description"
+              [style]="{ height: '200px' }"
+              placeholder="Escribe la descripción del producto..."
+              name="description"
+              class="form-control p-0 rounded shadow-sm"
+              [styles]="{ minHeight: '150px' }"
+            >
+            </quill-editor>
           </div>
-
           <div class="row">
             <label class="form-label mb-3">Imágenes del producto</label>
 
@@ -49,7 +55,7 @@
 
           <div class="row mt-3" *ngIf="imagePreviews.length > 0">
             <div class="col-md-4 text-center" *ngFor="let img of imagePreviews">
-              <img [src]="img" class="img-fluid rounded shadow-sm mb-3" width="150px" height="150px" alt="Vista previa">
+              <img [src]="img" class="img-fluid rounded shadow-sm mb-3" width="150px" style="max-height: 150px;" alt="Vista previa">
             </div>
           </div>
 

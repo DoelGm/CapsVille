@@ -4,26 +4,29 @@ import { FormsModule } from '@angular/forms';
 import { CategoriesService } from '../../../services/categories.service';
 import { CommonModule } from '@angular/common';
 import { ViewChild, ElementRef } from '@angular/core';
-
+import { QuillModule } from 'ngx-quill';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-new-product',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, QuillModule ],
   templateUrl: './new-product.component.html',
   styleUrl: './new-product.component.css'
 })
 export class NewProductComponent {
-
+  safeDescription: SafeHtml = '';
   @ViewChild('mainImageInput') mainImageInput!: ElementRef;
   @ViewChild('secondaryImage1Input') secondaryImage1Input!: ElementRef;
   @ViewChild('secondaryImage2Input') secondaryImage2Input!: ElementRef;
 
-  constructor(private productService: ProductService, private categoriesService: CategoriesService) { }
+  constructor(private productService: ProductService, private categoriesService: CategoriesService, private sanitizer: DomSanitizer) { }
 
   product: any = [];
   categories: any = [];
 
   ngOnInit() {
+    // Sanitiza el contenido recibido desde el producto
+    this.safeDescription = this.sanitizer.bypassSecurityTrustHtml(this.product.description);
     this.product.images = [];
     this.categoriesService.getAllCategories().subscribe((data) => {
       this.categories = data;

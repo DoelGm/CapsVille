@@ -76,22 +76,18 @@
                     </div>
                 </div>
 
-                <!-- Resto del contenido... (mantén la misma estructura pero ajusta las clases fs-*) -->
+              <a
+                  *ngIf="!isLoading"
+                  class="btn btn-success btn-lg w-100 py-2 py-md-3"
+                  href="https://wa.me/524951197952?text=Hola%20quiero%20más%20información%20sobre%20el%20producto%20{{product.name}}%20https://caps-ville.vercel.app/"
+                  target="_blank"
+                  rel="noopener"
+                >
+                <i class="bi bi-whatsapp"></i>
+                  <span class="d-none d-md-inline"> Contáctanos por WhatsApp</span>
+                  <span class="d-inline d-md-none">WhatsApp</span>
+                </a>
 
-                <!-- Botón de WhatsApp -->
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <button *ngIf="!isLoading" class="btn btn-success btn-lg w-100 py-2 py-md-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-whatsapp me-2" viewBox="0 0 16 20">
-                                <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                            </svg>
-                            <span class="d-none d-md-inline">Contáctanos por WhatsApp</span>
-                            <span class="d-inline d-md-none">WhatsApp</span>
-                        </button>
-                        <!-- placeholders -->
-                        <a *ngIf="isLoading" class="btn btn-success disabled placeholder col-12 py-3" aria-disabled="true"></a>
-                    </div>
-                </div>
 
                 <!-- Descripción -->
                 <div class="row mt-3">
@@ -100,12 +96,12 @@
                         <p *ngIf="isLoading" class="placeholder-glow">
                             <span class="placeholder col-12"></span>
                         </p>
-                        <p class="mt-2 lh-base fs-6">{{product.description}}</p>
+                       <div [innerHTML]="product.description"></div>
                     </div>
                 </div>
 
                 <!-- Mayoreo -->
-                <div class="row mt-3">
+                <!-- <div class="row mt-3">
                     <div class="col-12">
                         <p class="fs-5 fs-md-6 fw-bolder">Mayoreo:</p>
                         <ul class="fs-6">
@@ -114,7 +110,7 @@
                             <li>10 piezas originales $2850</li>
                         </ul>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -123,19 +119,19 @@
   <div class="container">
     <h2 class="mb-4">Productos Similares</h2>
 
-    <div *ngIf="similarProducts && similarProducts.length > 0 && !isLoading">
+    <!-- ✅ Si hay 3 o más productos: usar carrusel -->
+    <div *ngIf="similarProducts.length >= 3 && !isLoading">
       <owl-carousel-o [options]="customOptions">
         <ng-container *ngFor="let product of similarProducts">
           <ng-template carouselSlide>
             <div class="card rounded-4 m-2 overflow-hidden text-bg-light"
                  (click)="navigateToProduct(product.id)"
                  style="cursor: pointer; height: 100%;">
-            <img *ngIf="product.images?.length > 0"
-                  [src]="product.images[0]?.cloudinary_url || '/imgs/default.jpg'"
-                  class="card-img-top"
-                  alt="{{ product.name }}"
-                  style="height: 200px; object-fit: cover;">
-
+              <img *ngIf="product.images?.length > 0"
+                   [src]="product.images[0]?.cloudinary_url || '/imgs/default.jpg'"
+                   class="card-img-top"
+                   alt="{{ product.name }}"
+                   style="height: 200px; object-fit: cover;">
               <div class="card-body">
                 <h5 class="card-title">{{ product.name }}</h5>
                 <p class="card-text">${{ product.price }}</p>
@@ -146,6 +142,27 @@
       </owl-carousel-o>
     </div>
 
+    <!-- ✅ Si hay 1 o 2 productos: usar layout normal -->
+    <div *ngIf="similarProducts.length > 0 && similarProducts.length < 3 && !isLoading"
+         class="row justify-content-center">
+      <div *ngFor="let product of similarProducts" class="col-md-6 col-lg-4 mb-4">
+        <div class="card rounded-4 overflow-hidden text-bg-light"
+             (click)="navigateToProduct(product.id)"
+             style="cursor: pointer; height: 100%;">
+          <img *ngIf="product.images?.length > 0"
+               [src]="product.images[0]?.cloudinary_url || '/imgs/default.jpg'"
+               class="card-img-top"
+               alt="{{ product.name }}"
+               style="height: 200px; object-fit: cover;">
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">${{ product.price }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sin productos -->
     <div *ngIf="similarProducts && similarProducts.length === 0 && !isLoading"
          class="alert alert-info">
       No hay productos similares disponibles.

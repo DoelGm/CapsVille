@@ -4,15 +4,19 @@ import { ProductService } from '../../../services/product.service';
 import { CategoriesService } from '../../../services/categories.service';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
+import { QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-product-table',
   standalone: true,
-  imports: [CommonModule, NgxPaginationModule, FormsModule],
+  imports: [CommonModule, NgxPaginationModule, FormsModule, QuillModule],
   templateUrl: './product-table.component.html',
   styleUrls: ['./product-table.component.css']
 })
 export class ProductTableComponent {
+  newImages: { [productId: number]: { [index: number]: File } } = {};
+  imagePreviews: { [productId: number]: { [index: number]: string } } = {};
+
   p: number = 1;
   itemsPerPage: number = 10;
   products: any[] = [];
@@ -63,52 +67,87 @@ export class ProductTableComponent {
     });
   }
 
-  prepareEdit(product: any) {
-    this.productToEdit = { ...product };
-    this.isEditing = true;
-  }
-  
-  cancelEdit() {
-    this.isEditing = false;
-    this.productToEdit = null;
+ prepareEdit(product: any) {
+  this.productToEdit = { ...product };
+  this.isEditing = true;
+
+  // Inicializar objetos para las imágenes
+  if (!this.imagePreviews[this.productToEdit.id]) {
+    this.imagePreviews[this.productToEdit.id] = {};
   }
 
-  updateProduct() {
-    if (this.productToEdit) {
-      this.clearAlerts();
-      this.productService.updateProduct(this.productToEdit.id, this.productToEdit).subscribe({
-        next: (response) => {
-          this.successMessage = 'Producto actualizado exitosamente';
-          this.setAlertTimeout('success');
-          this.loadProducts();
-          this.isEditing = false;
+  if (!this.newImages[this.productToEdit.id]) {
+    this.newImages[this.productToEdit.id] = {};
+  }
+}
+
+cancelEdit() {
+  this.isEditing = false;
+  this.productToEdit = null;
+}
+
+
+  onImageChange(event: any, index: number, productId: number) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (!this.imagePreviews[productId]) {
+        this.imagePreviews[productId] = {};
+      }
+      this.imagePreviews[productId][index] = reader.result as string;
+
+      if (!this.newImages[productId]) {
+        this.newImages[productId] = {};
+      }
+      this.newImages[productId][index] = file;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+updateProduct() {
+  const formData = new FormData();
+  const id = this.productToEdit.id;
+
+  formData.append('name', this.productToEdit.name);
+  formData.append('description', this.productToEdit.description);
+  formData.append('category_id', this.productToEdit.category_id);
+  formData.append('stock', this.productToEdit.stock.toString());
+  formData.append('price', this.productToEdit.price.toString());
+  formData.append('discount', this.productToEdit.discount?.toString() || '');
+
+  if (this.newImages[id]) {
+    Object.keys(this.newImages[id]).forEach((index) => {
+      formData.append(`images[${index}]`, this.newImages[id][+index]);
+    });
+  }
+
+  this.productService.updateProduct(id, formData).subscribe({
+    next: () => {
+      this.successMessage = 'Producto actualizado exitosamente';
+      this.setAlertTimeout('success');
+      this.productService.updateProductImages(id, Object.entries(this.newImages[id] || {}).map(([index, file]) => ({ index: +index, file }))).subscribe({
+        next: () => {
+          console.log('Imágenes actualizadas exitosamente');
         },
         error: (error) => {
-          console.error('Error updating product', error);
-          this.errorMessage = 'Error al actualizar el producto';
+          console.error('Error al actualizar imágenes', error);
+          this.errorMessage = 'Error al actualizar las imágenes del producto';
           this.setAlertTimeout('error');
         }
       });
+      this.isEditing = false;
+      this.loadProducts();
+    },
+    error: (error) => {
+      console.error('Error al actualizar producto', error);
+      this.errorMessage = 'Error al actualizar el producto';
+      this.setAlertTimeout('error');
     }
-  }
+  });
+}
 
-onImageChange( event: Event, index: number): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      // Inicializar el array si es necesario
-      if (!this.productToEdit.images) {
-        this.productToEdit.images = [];
-      }
-      
-      // Asegurarse de que el array tenga suficiente longitud
-      while (this.productToEdit.images.length <= index) {
-        this.productToEdit.images.push(null!);
-      }
-      
-      // Asignar el archivo en la posición correspondiente
-      this.productToEdit.images[index] = input.files[0];
-    }
-  }
 
   calculateDiscount(price: number, discountPrice: number): number {
     if (!discountPrice || discountPrice <= price) return 0;
@@ -127,6 +166,16 @@ onImageChange( event: Event, index: number): void {
   confirmDelete() {
     if (this.productToDelete) {
       this.clearAlerts();
+      this.productService.deleteProductImage(this.productToDelete.id).subscribe({
+        next: () => {
+          console.log('Imagen del producto eliminada exitosamente');
+        },
+        error: (error) => {
+          console.error('Error al eliminar imagen del producto', error);
+          this.errorMessage = 'Error al eliminar la imagen del producto';
+          this.setAlertTimeout('error');
+        }
+      });
       this.productService.deleteProduct(this.productToDelete.id).subscribe({
         next: (response) => {
           this.successMessage = 'Producto eliminado exitosamente';
@@ -140,7 +189,7 @@ onImageChange( event: Event, index: number): void {
         }
       });
     }
-  } 
+  }
 
   dismissAlert(type: 'success' | 'error') {
     if (type === 'success') {
@@ -162,4 +211,4 @@ onImageChange( event: Event, index: number): void {
     this.errorMessage = null;
     clearTimeout(this.alertTimeout);
   }
-} 
+}
