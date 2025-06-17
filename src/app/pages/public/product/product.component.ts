@@ -13,7 +13,7 @@ import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
   imports: [CommonModule, CarouselModule]
 })
 export class ProductComponent implements OnInit, OnDestroy {
-  product: any = {};
+  product: any = [];
   category: any = {};
   isLoading: boolean = true;
   similarProducts: any = [];
@@ -61,6 +61,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.productService.getProduct(id).subscribe({
       next: (data) => {
         this.product = data;
+        console.log('Product data loaded:', this.product);
         this.loadCategoryData(data.category_id);
       },
       error: (err) => {

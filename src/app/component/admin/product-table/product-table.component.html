@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-12 p-4 bg-light rounded shadow">
-        <h1>Lista de Productos</h1>
+        <h1 *ngIf="!isEditing">Lista de Productos</h1>
 
         <!-- Alertas -->
         <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -33,7 +33,7 @@
               <tr *ngFor="let product of products | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
                 <td><strong>{{ product.id }}</strong></td>
                 <td>{{ product.name }}</td>
-                <td class="text-truncate" style="max-width: 200px;">{{ product.description }}</td>
+                <td class="text-truncate" style="max-width: 200px;" [innerHTML]="product.description"></td>
                 <td><span class="badge bg-success">{{ product.price | currency }}</span></td>
                 <td><span class="badge bg-success">{{ product.discount | currency }}</span></td>
                 <td>
@@ -55,8 +55,7 @@
             </tbody>
           </table>
 
-          <div class="p-3 mt-3">
-            <pagination-controls
+          <pagination-controls
             (pageChange)="p = $event"
             class="my-pagination text-center mt-3"
             previousLabel="Anterior"
@@ -76,78 +75,55 @@
               <input type="text" class="form-control" id="editName" [(ngModel)]="productToEdit.name" name="name" required>
             </div>
 
-            <!-- Descripción -->
+            <!-- Descripción con Quill -->
             <div class="mb-4">
               <label for="editDescription" class="form-label">Descripción</label>
-              <textarea class="form-control" id="editDescription" rows="3" [(ngModel)]="productToEdit.description" name="description" required></textarea>
+              <quill-editor
+                [(ngModel)]="productToEdit.description"
+                [style]="{ height: '200px' }"
+                [required]="true"
+                name="description">
+              </quill-editor>
             </div>
 
-<div class="row">
-  <label class="form-label mb-3">Imágenes del producto</label>
+            <!-- Imágenes -->
+            <div class="mb-4">
+              <div class="row">
+                <label class="form-label">Imágenes del producto</label>
 
-  <!-- Imagen principal -->
-  <div class="col-md-4 mb-3">
-    <label for="mainImage" class="form-label">Imagen principal*</label>
-    <input #mainImageInput class="form-control" type="file" id="mainImage"
-          (change)="onImageChange($event, 0)" accept="image/*">
-    <small class="text-muted">Deja el campo vacío si no deseas cambiar la imagen</small>
+                <!-- Contenedor de imágenes dinámicas -->
+                <div class="col-md-4 mb-3" *ngFor="let imgIndex of [0, 1, 2]; let i = index">
+                  <label [for]="'imageInput' + i" class="form-label">
+                    {{ i === 0 ? 'Imagen principal*' : 'Imagen secundaria ' + i }}
+                  </label>
+                  <input
+                    [id]="'imageInput' + i"
+                    class="form-control"
+                    type="file"
+                    (change)="onImageChange($event, i, productToEdit.id)"
+                    accept="image/*">
+                  <small class="text-muted">Deja el campo vacío si no deseas cambiar la imagen</small>
 
-    <div class="mt-2 text-center">
-      <ng-container *ngIf="productToEdit.image_urls?.[0]; else noMainImage">
-        <img [src]="productToEdit.image_urls[0]" class="img-thumbnail shadow" style="max-height: 100px;">
-                <div class="pt-2 mt-1 ">
-          <small class="text-muted">Imagen previa</small>
-        </div>
-      </ng-container>
-      <ng-template #noMainImage>
-        <span class="text-muted">Sin imagen</span>
-      </ng-template>
-    </div>
-  </div>
+                  <div class="mt-2 text-center">
+                  <ng-container *ngIf="(imagePreviews[productToEdit.id][i] || productToEdit.images[i]?.cloudinary_url); else noImage">
+                    <img
+                      [src]="imagePreviews[productToEdit.id][i] || productToEdit.images[i]?.cloudinary_url"
+                      class="img-thumbnail shadow"
+                      style="max-height: 150px;">
+                    <div class="pt-2 mt-1">
+                      <small class="text-muted">
+                        {{ imagePreviews[productToEdit.id][i] ? 'Nueva imagen' : 'Imagen actual' }}
+                      </small>
+                    </div>
+                  </ng-container>
+                    <ng-template #noImage>
+                      <span class="text-muted">Sin imagen</span>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-  <!-- Imagen secundaria 1 -->
-  <div class="col-md-4 mb-3">
-    <label for="secondaryImage1" class="form-label">Imagen secundaria 1</label>
-    <input #secondaryImage1Input class="form-control" type="file" id="secondaryImage1"
-          (change)="onImageChange($event, 1)" accept="image/*">
-    <small class="text-muted">Deja el campo vacío si no deseas cambiar la imagen</small>
-
-    <div class="mt-2 text-center">
-      <ng-container *ngIf="productToEdit.image_urls?.[1]; else noSecondary1">
-        <img [src]="productToEdit.image_urls[1]" class="img-thumbnail shadow" style="max-height: 100px;">
-                <div class="pt-2 mt-1 ">
-          <small class="text-muted">Imagen previa</small>
-        </div>
-      </ng-container>
-      <ng-template #noSecondary1>
-        <span class="text-muted">Sin imagen</span>
-      </ng-template>
-    </div>
-  </div>
-
-  <!-- Imagen secundaria 2 -->
-  <div class="col-md-4 mb-3">
-    <label for="secondaryImage2" class="form-label">Imagen secundaria 2</label>
-    <input #secondaryImage2Input class="form-control" type="file" id="secondaryImage2"
-          (change)="onImageChange($event, 2)" accept="image/*">
-    <small class="text-muted">Deja el campo vacío si no deseas cambiar la imagen</small>
-
-    <div class="mt-2 text-center">
-      <ng-container *ngIf="productToEdit.image_urls?.[2]; else noSecondary2">
-        <img [src]="productToEdit.image_urls[2]" class="img-thumbnail shadow" style="max-height: 100px;">
-        <div class="pt-2 mt-1 ">
-          <small class="text-muted">Imagen previa</small>
-        </div>
-      </ng-container>
-
-
-
-      <ng-template #noSecondary2>
-        <span class="text-muted">Sin imagen</span>
-      </ng-template>
-    </div>
-  </div>
-</div>
 
             <!-- Categoría -->
             <div class="mb-4">

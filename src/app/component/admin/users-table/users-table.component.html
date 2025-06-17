@@ -40,8 +40,7 @@
               </tr>
             </tbody>
           </table>
-        </div>
-          <!-- Controles de paginación -->
+                    <!-- Controles de paginación -->
          <div class="p-3 mt-3">
             <pagination-controls
             (pageChange)="p = $event"
@@ -50,6 +49,8 @@
             nextLabel="Siguiente">
           </pagination-controls>
           </div>
+        </div>
+
         <!-- Formulario de edición -->
         <div *ngIf="isEditing" class="mt-4 p-4 bg-light rounded">
           <h2>Editar Usuario</h2>

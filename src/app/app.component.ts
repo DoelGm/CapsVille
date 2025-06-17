@@ -5,6 +5,7 @@ import { FooterComponent } from "./component/public/footer/footer.component";
 import { HttpClientModule } from '@angular/common/http';
 import Aos from 'aos';
 
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, HttpClientModule],

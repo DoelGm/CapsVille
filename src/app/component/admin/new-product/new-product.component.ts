@@ -4,26 +4,30 @@ import { FormsModule } from '@angular/forms';
 import { CategoriesService } from '../../../services/categories.service';
 import { CommonModule } from '@angular/common';
 import { ViewChild, ElementRef } from '@angular/core';
- 
+import { QuillModule } from 'ngx-quill';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-new-product',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, QuillModule ],
   templateUrl: './new-product.component.html',
   styleUrl: './new-product.component.css'
 })
 export class NewProductComponent {
-
+  safeDescription: SafeHtml = '';
   @ViewChild('mainImageInput') mainImageInput!: ElementRef;
   @ViewChild('secondaryImage1Input') secondaryImage1Input!: ElementRef;
   @ViewChild('secondaryImage2Input') secondaryImage2Input!: ElementRef;
 
-  constructor(private productService: ProductService, private categoriesService: CategoriesService) { }
+  constructor(private productService: ProductService, private categoriesService: CategoriesService, private sanitizer: DomSanitizer) { }
 
-  product: any = {};
+  product: any = [];
   categories: any = [];
 
   ngOnInit() {
+    // Sanitiza el contenido recibido desde el producto
+    this.safeDescription = this.sanitizer.bypassSecurityTrustHtml(this.product.description);
+    this.product.images = [];
     this.categoriesService.getAllCategories().subscribe((data) => {
       this.categories = data;
     });
@@ -31,53 +35,71 @@ export class NewProductComponent {
 
   successMessage: string | null = null;
 
-  onImageChange(event: Event, index: number): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      // Inicializar el array si es necesario
-      if (!this.product.images) {
-        this.product.images = [];
-      }
-      
-      // Asegurarse de que el array tenga suficiente longitud
-      while (this.product.images.length <= index) {
-        this.product.images.push(null!);
-      }
-      
-      // Asignar el archivo en la posición correspondiente
-      this.product.images[index] = input.files[0];
-    }
+  imagePreviews: string[] = [];
+
+onImageChange(event: Event, index: number): void {
+  const input = event.target as HTMLInputElement;
+
+  if (input.files && input.files.length > 0) {
+    const file = input.files[0];
+
+    this.product.images[index] = file;
+
+    // Mostrar preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.imagePreviews[index] = e.target.result;
+    };
+    reader.readAsDataURL(file);
   }
+}
 
 
   addProduct() {
-    this.productService.createProduct(this.product).subscribe(
-      (response) => {
-        this.successMessage = '¡Producto agregado exitosamente!';
-        console.log('Producto agregado:', this.product);
-        this.resetForm();
-      },
-      (error) => {
-        console.log(this.product);
-        console.error('Error al agregar el producto', error);
+  this.productService.createProduct(this.product).subscribe(
+    (response) => {
+      this.successMessage = '¡Producto agregado exitosamente!';
+      console.log('Producto agregado:', response.product.id);
+
+      const productId = response.product.id;
+
+     if (this.product.images && this.product.images.length > 0) {
+      const validImages = this.product.images.filter((img: File) => img != null);
+      if (validImages.length > 0) {
+        this.productService.uploadImages(validImages, productId).subscribe(
+          (res) => console.log('Imágenes subidas exitosamente:', res),
+          (err) => console.error('Error al subir imágenes:', err)
+        );
       }
-    );
-  }
+    }
 
-  resetForm() {
-    this.product = {
-      name: '',
-      description: '',
-      price: null,
-      discount: null,
-      category_id: null,
-      imageUrl: '',
-      stock: null
-    };
+      this.resetForm();
+    },
+    (error) => {
+      console.error('Error al agregar el producto', error);
+    }
+  );
+}
 
-    // Limpia los inputs de archivo manualmente
-    this.mainImageInput.nativeElement.value = '';
-    this.secondaryImage1Input.nativeElement.value = '';
-    this.secondaryImage2Input.nativeElement.value = '';
-  }
+
+resetForm() {
+  this.product = {
+    name: '',
+    description: '',
+    price: null,
+    discount: null,
+    category_id: null,
+    imageUrl: '',
+    stock: null,
+    images: []
+  };
+
+  this.imagePreviews = [];
+
+  // Limpia los inputs de archivo manualmente
+  this.mainImageInput.nativeElement.value = '';
+  this.secondaryImage1Input.nativeElement.value = '';
+  this.secondaryImage2Input.nativeElement.value = '';
+}
+
 }

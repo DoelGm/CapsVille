@@ -1,5 +1,5 @@
-<div class="box-product  p-5 mb-5 mt-5 bg-body rounded">
-  <!-- Mostrar loading -->
+<div class="box-product p-5 mb-5 mt-5 bg-body rounded">
+  <!-- Loading -->
   <div *ngIf="isLoading" class="text-center">
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Cargando...</span>
@@ -7,24 +7,36 @@
     <p class="mt-3">Cargando productos...</p>
   </div>
 
-  <!-- Mostrar mensaje si no hay productos -->
+  <!-- Mensaje de alerta -->
   <div *ngIf="!isLoading && alertMessage">
     <div class="alert alert-warning text-center" role="alert">
       <h4 class="alert-heading">{{ alertMessage }}</h4>
     </div>
   </div>
 
-  <!-- Mostrar productos -->
- <div class="row" *ngIf="!isLoading && products.length > 0">
-  <div class="col-md-3" *ngFor="let product of products">
-    <div class="card rounded-4 m-2 overflow-hidden text-bg-light mt-5" [routerLink]="['/product', product.id]" style="cursor:pointer;">
-      <img [src]="product.image_urls? product.image_urls[0] : 'imgs/default.jpg'" width="100" height="300" class="card-img-top object-fit-cover" alt="...">
-      <div class="card-body text-center">
-        <h5 class="card-title text-danger">{{ product.name }}</h5>
-        <small class="card-text text-truncate">{{ product.description }}</small>
-        <p class="card-text fw-bold fs-5"><span class="badge text-bg-success">{{ product.price | currency }}</span></p>
+  <!-- Productos -->
+  <div class="row" *ngIf="!isLoading && products.length > 0">
+    <div class="col-md-3" *ngFor="let product of products">
+      <div
+        class="card rounded-4 m-2 overflow-hidden text-bg-light mt-5"
+        [routerLink]="['/product', product.id]"
+        style="cursor:pointer;"
+      >
+        <img
+          [src]="product.image_urls?.[0] || '/imgs/default.jpg'"
+          width="100"
+          height="300"
+          class="card-img-top object-fit-cover"
+          alt="..."
+        />
+        <div class="card-body text-center">
+          <h5 class="card-title text-danger">{{ product.name }}</h5>
+          <small class="card-text text-truncate" [innerHTML]="product.description"></small>
+          <p class="card-text fw-bold fs-5">
+            <span class="badge text-bg-success">{{ product.price | currency }}</span>
+          </p>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </div>
