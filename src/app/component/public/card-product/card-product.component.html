@@ -31,7 +31,7 @@
         />
         <div class="card-body text-center">
           <h5 class="card-title text-danger">{{ product.name }}</h5>
-          <small class="card-text text-truncate">{{ product.description }}</small>
+          <small class="card-text text-truncate" [innerHTML]="product.description"></small>
           <p class="card-text fw-bold fs-5">
             <span class="badge text-bg-success">{{ product.price | currency }}</span>
           </p>

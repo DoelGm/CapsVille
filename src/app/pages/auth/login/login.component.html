@@ -1,23 +1,30 @@
-<section class="p-5 mt-5 bg-danger-subtle">
+<section class="p-5 mt-5">
     <div class="row mt-5">
         <div class="col-md-3"></div>
-            <div class="col-md-6 border-radius-3 bg-light  p-4 shadow rounded">
-                <div class="mb-5">
-                    <h1 class="text-center text-dark">Iniciar Sesión</h1>
+            <div class="col-md-6 border-radius-3 login p-3 shadow rounded">
+              <form (submit)="login(); $event.preventDefault()">
+                <div class="row">
+                <div class="col-2"></div>
+                <div class="col-8">
+                <div class="text-center">
+                  <img src="imgs/CAPSVILLAGE-11.png" width="150" height="150" alt="">
                 </div>
-                <form (submit)="login(); $event.preventDefault()">
                 <div class="mb-3">
-                    <label for="email" class="form-label text-dark">Email:</label>
+                    <label for="email" class="form-label text-white">Email:</label>
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon1">{{"@"}}</span>
                         <input type="email" id="email" [(ngModel)]="email" name="email" class="form-control">
                     </div>
                 </div>
                 <div class="mb-5">
-                    <label for="password" class="form-label text-dark">Contraseña:</label>
+                    <label for="password" class="form-label text-white">Contraseña:</label>
                     <input type="password" id="password" [(ngModel)]="password" name="password" class="form-control">
                 </div>
-                <button type="submit" class="btn btn-danger">Ingresar</button>
+                <button type="submit" class="btn btn-outline-light mb-5">Iniciar sesion</button>
+                </div>
+                </div>
+                <div class="col-2"></div>
+
                 </form>
 
             </div>
