@@ -1,44 +1,40 @@
 <section class="mt-4 pt-5">
   <div class="container">
     <div class="row">
-      <div class="col-12 p-3 p-md-4 bg-light rounded shadow">
-        <h1 class="mb-4 text-center text-md-start">Lista de noticias</h1>
+      <div class="col-md-12 p-4 bg-light rounded shadow">
+        <h1 class="text-start mb-4" *ngIf="isEditing">Editar Noticia</h1>
 
-        <!-- Mensajes -->
+        <!-- Mensajes de estado -->
+        <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ successMessage }}
+          <button type="button" class="btn-close" (click)="dismissAlert('success')" aria-label="Close"></button>
+        </div>
         <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
           {{ errorMessage }}
           <button type="button" class="btn-close" (click)="dismissAlert('error')" aria-label="Close"></button>
         </div>
 
-        <!-- Vista de tabla -->
-        <div *ngIf="!isEditing" class="table-responsive mb-3">
-          <table class="table table-hover align-middle mb-0 bg-white rounded">
-            <thead class="table-secondary text-center text-secondary">
+        <!-- Mostrar lista solo si NO se está editando -->
+        <div *ngIf="!isEditing" class="table-responsive rounded mb-3">
+          <h1>Lista de Noticias</h1>
+          <table class="table table-hover  align-middle mb-0 bg-white rounded">
+            <thead class="table-secondary text-center">
               <tr>
                 <th>#</th>
                 <th>Título</th>
                 <th>Contenido</th>
-                <th>Imagen</th>
                 <th>Acciones</th>
               </tr>
             </thead>
-            <tbody class="text-center">
-              <tr *ngFor="let post of list | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
-                <td><strong>{{ post.id }}</strong></td>
-                <td>{{ post.title }}</td>
-                <td class="text-truncate" style="max-width: 150px;">{{ post.content }}</td>
+            <tbody>
+              <tr *ngFor="let post of list| paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+                <td class="text-center">{{ post.id }}</td>
+                <td class="text-center">{{ post.title }}</td>
+                <td class="text-center">{{ post.content }}</td>
                 <td>
-                  <ng-container *ngIf="post.image_url; else noImage">
-                    <img [src]="post.image_url" alt="Imagen de la noticia" class="img-thumbnail" style="max-width: 80px; max-height: 80px;">
-                  </ng-container>
-                  <ng-template #noImage>
-                    <span class="text-muted">Sin imagen</span>
-                  </ng-template>
-                </td>
-                <td>
-                  <div class="d-flex flex-column flex-md-row justify-content-center gap-2">
+                  <div class="d-flex justify-content-center gap-2">
                     <button class="btn btn-outline-primary btn-sm" (click)="prepareEdit(post)">
-                      <i class="fas fa-edit me-1"></i> Editar
+                      <i  class="fas fa-pencil-alt me-1"></i> Editar
                     </button>
                     <button class="btn btn-outline-danger btn-sm" (click)="prepareDelete(post)">
                       <i class="fas fa-trash-alt me-1"></i> Eliminar
@@ -49,74 +45,109 @@
             </tbody>
           </table>
 
-          <div class="p-3 mt-3">
+        
+            <div class="p-3 mt-3" >
             <pagination-controls
-            (pageChange)="p = $event"
-            class="my-pagination text-center mt-3"
-            previousLabel="Anterior"
-            nextLabel="Siguiente">
-          </pagination-controls>
+              (pageChange)="p = $event"
+              class="my-pagination text-center mt-3"
+              previousLabel="Anterior"
+              nextLabel="Siguiente">
+            </pagination-controls>
           </div>
-          
         </div>
+        
 
-        <!-- Formulario de edición -->
-        <div *ngIf="isEditing" class="mt-4 p-4 bg-white rounded shadow-sm">
-          <h2 class="mb-4 text-center text-md-start">Editar Noticia</h2>
 
-          <form #editForm="ngForm" (ngSubmit)="updatePost()" enctype="multipart/form-data">
-            <div class="mb-3">
-              <label class="form-label">Título</label>
-              <input type="text" class="form-control" [(ngModel)]="postToEdit.title" name="title" required>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Contenido</label>
-              <textarea class="form-control" rows="4" [(ngModel)]="postToEdit.content" name="content" required></textarea>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Seleccionar nueva imagen (opcional)</label>
-              <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*">
-
-              <div *ngIf="postToEdit.image_url" class="mt-3">
-                <p class="text-muted mb-1">Imagen actual:</p>
-                <img [src]="postToEdit.image_url" class="img-thumbnail" style="max-height: 100px;">
-              </div>
-            </div> 
-
-            <div class="d-grid d-md-flex gap-2">
-              <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">
-                <i class="fas fa-save me-1"></i> Guardar
-              </button>
-              <button type="button" class="btn btn-secondary" (click)="cancelEdit()">
-                <i class="fas fa-times me-1"></i> Cancelar
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+<form *ngIf="isEditing" (ngSubmit)="updatePost()" #postForm="ngForm" enctype="multipart/form-data">
+  <div class="mb-4">
+    <label for="title" class="form-label">Título</label>
+    <input
+      type="text"
+      class="form-control"
+      id="title"
+      placeholder="Título de la noticia"
+      [(ngModel)]="postToEdit.title"
+      name="title"
+      required
+    />
   </div>
-</section>
 
-<!-- Modal de confirmación -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ¿Estás seguro de que deseas eliminar la noticia <strong>"{{ postToDelete?.title }}"</strong>? Esta acción no se puede deshacer.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-danger" (click)="confirmDelete()">
-          <i class="fas fa-trash-alt me-1"></i> Eliminar
-        </button>
-      </div>
-    </div>
+  <div class="mb-4">
+    <label for="content" class="form-label">Contenido</label>
+    <textarea
+      class="form-control"
+      id="content"
+      placeholder="Contenido de la noticia"
+      [(ngModel)]="postToEdit.content"
+      name="content"
+      required
+      rows="5"
+    ></textarea>
+  </div>
+<!-- Imagen actual -->
+<div class="mt-2 text-center" *ngIf="!imagePreview">
+  <img [src]="postToEdit?.image?.cloudinary_url || '/imgs/default.jpg'" style="max-height: 100px;" alt="Imagen actual" />
+  <div class="pt-2 mt-1">
+    <small class="text-muted">Imagen actual</small>
+  </div>
+  
+    <ng-template #noMainImage>
+      <p class="text-muted">No hay imagen disponible</p>
+    </ng-template>
+  </div>
+
+<!-- Vista previa de nueva imagen -->
+<div class="mt-3 text-center" *ngIf="imagePreview">
+  <img [src]="imagePreview" alt="Vista previa" style="max-height: 150px;" class="img-thumbnail">
+  <div class="pt-2">
+    <small class="text-muted">Vista previa de la nueva imagen</small>
   </div>
 </div>
+
+
+
+  <!-- Nueva imagen (opcional) -->
+  <div class="mb-4">
+    <label for="image" class="form-label">Seleccionar nueva imagen</label>
+    <input
+      type="file"
+      class="form-control"
+      id="image"
+      name="image"
+      accept="image/*"
+      (change)="onImageChange($event)"
+    />
+    <small class="text-muted">Selecciona solo si quieres reemplazar la imagen actual.</small>
+  </div>
+
+  <!-- Botones -->
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <button type="submit" [disabled]="postForm.invalid" class="btn btn-primary">
+      Actualizar noticia
+    </button>
+    <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancelar</button>
+  </div>
+</form>
+
+
+  <!-- Modal de confirmación -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ¿Estás seguro de que deseas eliminar el post "{{ postToDelete?.title }}"? Esta acción no se puede deshacer.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" (click)="confirmDelete()" data-bs-dismiss="modal">
+            <i class="fas fa-trash-alt me-1"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
