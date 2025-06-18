@@ -8,9 +8,9 @@
           <form #ticketForm="ngForm" (ngSubmit)="submitForm(ticketForm)">
             <div class="mb-4">
               <label for="cliente" class="form-label">Nombre del Cliente</label>
-              <select name="cliente"  (change)="onCustomerSelected($event)" id="cliente" class="form-select" ngModel required>
+              <select name="cliente" (change)="onCustomerSelected($event)" id="cliente" class="form-select" ngModel required>
                 <option value="" disabled selected>Selecciona un cliente</option>
-                <option *ngFor="let customer of customers"   [value]="customer.id">{{ customer.name }}</option>
+                <option *ngFor="let customer of customers" [value]="customer.id">{{ customer.name }}</option>
               </select>
             </div>
 
@@ -22,16 +22,6 @@
             </div>
 
             <div class="mb-4">
-              <label for="id" class="form-label">Folio</label>
-              <div class="row">
-                <div class="col-2">
-                    <input type="number" class="form-control" id="id" name="id" ngModel required>
-                </div>
-              </div>
-              
-            </div>
-
-            <div class="mb-4">
               <label for="titulo" class="form-label">Asunto</label>
               <select name="titulo" id="titulo" class="form-select" ngModel required>
                 <option value="" disabled selected>Selecciona un asunto</option>
@@ -40,65 +30,110 @@
               </select>
             </div>
 
-          <div class="mb-4">
-              <h3>Productos</h3>
-              <hr>
-              <div class="row">
+            <div class="mb-4">
+              <h3 class="mb-4">Productos</h3>
+              <hr class="mb-4">
+              
+              <div class="row g-3 mb-4">
+                <!-- Selección de Producto -->
                 <div class="col-md-5">
                   <label for="producto" class="form-label">Producto</label>
-                  <select name="producto" id="producto" class="form-select" 
-                          (change)="onProductSelected($event)" required>
-                    <option value="" disabled selected>Selecciona un producto</option>
-                    <option *ngFor="let product of products" [value]="product.id">
+                <select #productSelect id="producto" class="form-select" 
+                        (change)="onProductSelected($event)" required>
+                  <option value="" disabled selected>Selecciona un producto</option>
+                  <ng-container *ngFor="let product of products">
+                    <option *ngIf="product.stock > 0" [value]="product.id">
                       {{ product.name }} - {{ product.price | currency }}
                     </option>
-                  </select>
+                  </ng-container>
+
+                </select>
+
                 </div>
+                
+                <!-- Cantidad -->
                 <div class="col-md-2">
                   <label for="cantidad" class="form-label">Cantidad</label>
                   <input type="number" class="form-control" id="cantidad" 
                         [(ngModel)]="selectedQuantity" name="cantidad" min="1" required>
                 </div>
-                <div class="col-md-3 d-flex align-items-end ">
+                
+                <!-- Opción de Mayoreo -->
+                <div class="col-md-2 d-flex flex-column">
+                  <label class="form-label mb-2">Opciones</label>
+                  <div class="form-check form-switch mt-1">
+                    <input class="form-check-input" type="checkbox" id="mayoreoSwitch" 
+                           [(ngModel)]="useWholesalePrice" name="mayoreo">
+                    <label class="form-check-label" for="mayoreoSwitch">Mayoreo</label>
+                  </div>
+                </div>
+                
+                <!-- Precio Mayoreo (condicional) -->
+                <div class="col-md-3" *ngIf="useWholesalePrice">
+                  <label for="precioMayoreo" class="form-label">Precio Mayoreo</label>
+                  <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="form-control" id="precioMayoreo" 
+                          [(ngModel)]="wholesalePrice" name="precioMayoreo" min="0.01" step="0.01">
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Botón Agregar -->
+              <div class="row mb-4">
+                <div class="col-md-12 d-flex justify-content-end">
                   <button type="button" class="btn btn-primary" (click)="addProductToTicket()">
-                    Agregar Producto
+                    <i class="bi bi-plus-circle me-2"></i>Agregar Producto
                   </button>
                 </div>
-                <div class="mb-4" *ngIf="ticketItems.length > 0">
-                  <table class="table table-bordered mt-3">
-                    <thead>
+              </div>
+              
+              <!-- Tabla de Productos -->
+              <div class="mb-4" *ngIf="ticketItems.length > 0">
+                <div class="table-responsive">
+                  <table class="table table-hover table-bordered">
+                    <thead class="table-light">
                       <tr>
                         <th>Producto</th>
-                        <th>Precio Unitario</th>
-                        <th>Cantidad</th>
-                        <th>Subtotal</th>
+                        <th class="text-end">Precio</th>
+                        <th class="text-end">Cantidad</th>
+                        <th class="text-end">Subtotal</th>
                         <th>Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr *ngFor="let item of ticketItems; let i = index">
-                        <td>{{ item.product.name }}</td>
-                        <td>{{ item.product.price | currency }}</td>
-                        <td>{{ item.quantity }}</td>
-                        <td>{{ item.product.price * item.quantity | currency }}</td>
                         <td>
-                          <button class="btn btn-sm btn-danger" (click)="removeItem(i)">
-                            Eliminar
+                          {{ item.product.name }}
+                          <span *ngIf="item.useWholesalePrice" class="badge bg-secondary ms-2">Precio Mayoreo</span>
+                        </td>
+                        <td class="text-end">{{ item.useWholesalePrice && item.wholesalePrice !== null ? (item.wholesalePrice | currency) : (item.product.price | currency) }}</td>
+                        <td class="text-end">{{ item.quantity }}</td>
+                        <td class="text-end">{{ (item.useWholesalePrice && item.wholesalePrice !== null ? item.wholesalePrice : item.product.price) * item.quantity | currency }}</td>
+                        <td class="text-center">
+                          <button class="btn btn-sm btn-outline-danger" (click)="removeItem(i)">
+                            <i class="bi bi-trash"></i>
                           </button>
                         </td>
                       </tr>
                     </tbody>
-                    <tfoot>
+                    <tfoot class="table-group-divider">
                       <tr>
-                        <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                        <td colspan="2">{{ calculateTotal() | currency }}</td>
+                        <td colspan="3" class="text-end fw-bold">Total:</td>
+                        <td colspan="2" class="text-end fw-bold">{{ calculateTotal() | currency }}</td>
                       </tr>
                     </tfoot>
                   </table>
                 </div>
               </div>
+              
+              <!-- Botón Enviar -->
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="submit" class="btn btn-danger px-4">
+                  <i class="bi bi-send me-2"></i>Enviar Ticket
+                </button>
+              </div>
             </div>
-            <button type="submit" class="btn btn-danger">Enviar Ticket</button>
           </form>
         </div>
       </div>
@@ -106,17 +141,17 @@
   </section>
 </div>
 
-<div class="row ">
-  <div class="col-md-5">
-    <!-- RESUMEN DEL TICKET -->
-    <div *ngIf="ticketData"  id="imagenPreview" class="container mt-5 pt-3">
-      <div #pdfContent class="p-4 bg-white border rounded">
+<!-- RESUMEN DEL TICKET (fuera del formulario) -->
+<div *ngIf="ticketData" class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div #pdfContent class="p-4 bg-white border rounded" style="max-width: 600px;">
         <div class="row">
           <div class="col-md-6">
             <h2 class="mb-4 p-2 text-start"><img src="imgs/CAPSVILLAGE-11.png" width="50" alt=""> Caps Ville</h2>
           </div>
           <div class="col-md-6">
-            <h2 class="mb-4 p-2 text-end">Folio#{{ ticketData.id }}</h2>
+            <h2 class="mb-4 p-2 text-end">Folio#{{ ticketData.folio }}</h2>
           </div>
         </div>
 
@@ -127,59 +162,69 @@
           <p>📧 Email: capsvillegmail.com</p>
           <p>💼 Caps Ville es tu mejor opción para invertir 💸</p>
           <hr>
-          <p class="lh-1">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="25" fill="currentColor" class="bi bi-person" viewBox="0 0 16 20">
-              <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
-            </svg> 
-            <strong> Cliente:</strong> {{ selectedCustomer.name }} <br>
-            <strong>📞 Teléfono:</strong> {{ selectedCustomer.phone }}
-
+<!-- Info Cliente -->
+        <div class="mb-3 p-2 bg-light rounded">
+          <p class="mb-1 fw-bold">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill me-1" viewBox="0 0 16 16">
+              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+            </svg>
+            {{ selectedCustomer.name }}
           </p>
+          <p class="mb-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-fill me-1" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511Z"/>
+            </svg>
+            {{ selectedCustomer.phone }}
+          </p>
+        </div>
 
-         <table class="table table-bordered mt-3" *ngIf="ticketData">
-            <thead class="table-light">
-              <tr>
-                <th>Cantidad</th>
-                <th>Producto</th>
-                <th>Total</th>
-              </tr>
-            </thead>
+        <!-- Items -->
+        <div class="mb-3">
+          <h5 class="text-center mb-2">{{ ticketData.items.length }} Productos(s)</h5>
+          
+          <table class="table table-borderless">
             <tbody>
               <tr *ngFor="let item of ticketData.items">
-                <td>{{ item.quantity }}x</td>
-                <td>{{ item.product.name }} - {{ item.product.price | currency }}</td>
-                <td>{{ item.product.price * item.quantity | currency }}</td>
+                <td class="ps-0" style="width: 15%">{{ item.quantity }}x</td>
+                 <td>
+                          {{ item.product.name }}
+                          <span *ngIf="item.useWholesalePrice" class="badge bg-secondary ms-2">Precio Mayoreo</span>
+                        </td>
+                <td class="text-end pe-0">{{ (item.useWholesalePrice && item.wholesalePrice !== null ? item.wholesalePrice : item.product.price) * item.quantity | currency }}</td>
+                
+
+                
               </tr>
             </tbody>
           </table>
+        </div>
 
-          <div class="row" *ngIf="ticketData">
-            <div class="col-md-6"></div>
-            <div class="col-md-6">
-              <p class="text-end"><strong>💵 Total:</strong> {{ ticketData.total | currency }}</p>
-            </div>
-          </div>
-
-          <hr>
-
-          <div class="row">
-            <div class="col-md-12">
-              <p class="text-center">
-                <strong>¡Gracias por su confianza!</strong><br>
-                    <strong>¡Éxito en sus ventas!</strong><br>
-                {{ ticketData.date | date:'dd/MM/yyyy HH:mm' }}<br>
-                💙 Caps Ville And Wear 🧢
-              </p>
-            </div>
+        <!-- Total -->
+        <div class="border-top pt-2 mb-3">
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold">Total:</span>
+            <span class="fw-bold">{{ ticketData.total | currency }}</span>
           </div>
         </div>
-      </div>
 
-      <div class="text-center mt-4">
+        <!-- Pie -->
+        <div class="text-center small">
+          <p class="mb-1">¡Gracias por su confianza!</p>
+          <p class="mb-1 fw-bold">Éxito en sus ventas</p>
+          <p>{{ ticketData.date | date:'dd/MM/yyyy HH:mm' }}</p>
+          <p class="mt-2">💙 Caps Ville And Wear 🧢</p>
+        </div>
+      </div>
+            </div>
+
+
+      <div class="text-start mt-4">
         <button class="btn btn-success m-2" (click)="generatePDF()">📄 Descargar PDF</button>
-        <button class="btn btn-success" (click)="generateImage()">📄 Descargar PNG</button>
+        <button class="btn btn-success m-2" (click)="generateImage()">📄 Descargar PNG</button>
+        <button class="btn btn-primary m-2" (click)="ticketData = null">Crear nuevo ticket</button>
       </div>
     </div>
   </div>
 </div>
+
 
