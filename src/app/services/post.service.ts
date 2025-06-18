@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Post {
   id?: number;
@@ -14,7 +15,7 @@ export interface Post {
   providedIn: 'root'
 })
 export class PostsService {
-  private apiUrl = 'http://127.0.0.1:8000/api/posts'; // Cambia esto a tu URL de API
+  private apiUrl = `${environment.apiUrl}posts`;
 
   constructor(private http: HttpClient) {}
 
