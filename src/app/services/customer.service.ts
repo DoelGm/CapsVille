@@ -9,7 +9,7 @@ export class CustomerService {
   private headers = new HttpHeaders({
     'Authorization': `Bearer ${localStorage.getItem('token')}`
   });
-  private apiUrl = `${environment.apiUrl}/api/customers`;
+  private apiUrl = `${environment.apiUrl}/customers`;
 
   constructor(private http: HttpClient) { }
 
