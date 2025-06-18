@@ -16,7 +16,7 @@ export interface Post {
 })
 export class PostsService {
 
-  private apiUrl = `${environment.apiUrl}posts`;
+  private apiUrl = `${environment.apiUrl}/posts`;
 
 
   constructor(private http: HttpClient) {}
