@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,7 @@ export class LoginComponent {
       password: this.password
     };
 
-    this.http.post<any>('${environment.apiUrl}/api/login', credentials).subscribe({
+    this.http.post<any>(`${environment.apiUrl}/login`, credentials).subscribe({
       next: (response) => {
         localStorage.setItem('userId', response.user.id);
         // Guardar el token (opcional: en localStorage o service)
