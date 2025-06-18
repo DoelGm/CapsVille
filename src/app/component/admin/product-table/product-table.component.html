@@ -1,7 +1,7 @@
 <section class="mt-4 pt-5">
   <div class="container">
     <div class="row">
-      <div class="col-12 p-4 bg-light rounded shadow">
+      <div *ngIf="!isEditing" class="col-12 p-4 bg-light rounded shadow">
         <h1 *ngIf="!isEditing">Lista de Productos</h1>
 
         <!-- Alertas -->
@@ -80,20 +80,20 @@
               <label for="editDescription" class="form-label">Descripción</label>
               <quill-editor
                 [(ngModel)]="productToEdit.description"
-                [style]="{ height: '200px' }"
                 [required]="true"
-                name="description">
+                name="description"
+                class="form-control p-0 rounded shadow-sm">
               </quill-editor>
             </div>
-
+            <hr>
             <!-- Imágenes -->
             <div class="mb-4">
               <div class="row">
-                <label class="form-label">Imágenes del producto</label>
+                <label class="form-label fw-bold">Imágenes del producto</label>
 
                 <!-- Contenedor de imágenes dinámicas -->
                 <div class="col-md-4 mb-3" *ngFor="let imgIndex of [0, 1, 2]; let i = index">
-                  <label [for]="'imageInput' + i" class="form-label">
+                  <label [for]="'imageInput' + i" class="form-label text-danger">
                     {{ i === 0 ? 'Imagen principal*' : 'Imagen secundaria ' + i }}
                   </label>
                   <input
@@ -124,7 +124,7 @@
               </div>
             </div>
 
-
+            <hr>
             <!-- Categoría -->
             <div class="mb-4">
               <label for="editCategory" class="form-label">Categoría*</label>

@@ -89,6 +89,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       next: (products) => {
         this.similarProducts = products.filter((p: any) => p.id !== this.product.id);
         this.isLoading = false;
+        console.log('Similar products loaded:', this.similarProducts);
       },
       error: (err) => {
         console.error('Error loading similar products', err);

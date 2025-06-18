@@ -1,0 +1,11 @@
+.container-movil{
+  display: none;
+}
+@media (max-width: 768px) {
+  .container-movil {
+    display: block  ;
+  }
+  .container-pc{
+    display: none;
+  }
+}

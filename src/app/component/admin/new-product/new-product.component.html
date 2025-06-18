@@ -22,32 +22,30 @@
             <label for="description" class="form-label">Descripción</label>
             <quill-editor
               [(ngModel)]="product.description"
-              [style]="{ height: '200px' }"
               placeholder="Escribe la descripción del producto..."
               name="description"
               class="form-control p-0 rounded shadow-sm"
-              [styles]="{ minHeight: '150px' }"
             >
             </quill-editor>
           </div>
           <div class="row">
-            <label class="form-label mb-3">Imágenes del producto</label>
+            <label class="form-label fw-bold mb-3">Imágenes del producto</label>
 
             <div class="col-md-4 mb-3">
-              <label for="mainImage" class="form-label">Imagen principal*</label>
+              <label for="mainImage" class="form-label text-danger">Imagen principal*</label>
               <input #mainImageInput class="form-control" type="file" id="mainImage"
                     (change)="onImageChange($event, 0)" accept="image/*" required>
-              <small class="text-muted">Imagen que se mostrará como principal</small>
+              <small class="text-muted text-danger">Imagen que se mostrará como principal</small>
             </div>
 
             <div class="col-md-4 mb-3">
-              <label for="secondaryImage1" class="form-label">Imagen secundaria 1</label>
+              <label for="secondaryImage1" class="form-label text-danger">Imagen secundaria 1</label>
               <input #secondaryImage1Input class="form-control" type="file" id="secondaryImage1"
                     (change)="onImageChange($event, 1)" accept="image/*">
             </div>
 
             <div class="col-md-4 mb-3">
-              <label for="secondaryImage2" class="form-label">Imagen secundaria 2</label>
+              <label for="secondaryImage2" class="form-label text-danger" >Imagen secundaria 2</label>
               <input #secondaryImage2Input class="form-control" type="file" id="secondaryImage2"
                     (change)="onImageChange($event, 2)" accept="image/*">
             </div>
