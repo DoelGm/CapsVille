@@ -21,6 +21,7 @@ export class NewPostComponent {
 
   successMessage: string | null = null;
   errorMessage: string | null = null;
+  imagePreview: string | ArrayBuffer | null = null;
 
   constructor(private postsService: PostsService, private http: HttpClient) {}
 
@@ -29,7 +30,16 @@ export class NewPostComponent {
     const file = event.target.files[0];
     if (file) {
       this.post.image = file; // Asignamos la imagen al objeto post
-    }
+    console.log('Imagen seleccionada:', this.post.image);
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.imagePreview = reader.result;
+      console.log('Vista previa cargada:', this.imagePreview);
+    };
+
+    reader.readAsDataURL(file);
+  }
   }
 
   createPost(): void {
@@ -44,8 +54,17 @@ export class NewPostComponent {
       next: (response) => {
         this.successMessage = 'Post creado exitosamente.';
         console.log('Post creado exitosamente:', response);
-        this.resetForm(); // Reseteamos el formulario después de crear el post
-        // Aquí podrías redirigir o mostrar un mensaje de éxito
+        const postId = response.post.id; // Obtenemos el ID del post creado
+        this.postsService.uploadImages(postId, [this.post.image]).subscribe({
+          next: (uploadResponse) => {
+            console.log('Imágenes subidas exitosamente:', uploadResponse);
+             this.resetForm(); // Reseteamos el formulario después de crear el post
+          },
+          error: (uploadError) => {
+            console.error('Error al subir las imágenes:', uploadError);
+            this.errorMessage = 'Hubo un error al subir las imágenes. Por favor, inténtalo de nuevo.';
+          }
+        });
       },
       error: (error) => {
         console.error('Error al crear el post:', error);

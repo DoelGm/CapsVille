@@ -1,133 +1,150 @@
-import { Component } from '@angular/core';
-import { PostsService } from '../../../services/post.service';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { HttpClient } from '@angular/common/http';
+import { PostsService, Post } from '../../../services/post.service';
 
 @Component({
   selector: 'app-list-post',
   standalone: true,
   imports: [FormsModule, CommonModule, NgxPaginationModule],
-  templateUrl: './list-post.component.html',  
+  templateUrl: './list-post.component.html',
   styleUrls: ['./list-post.component.css']
 })
-export class ListPostComponent {
+export class ListPostComponent implements OnInit {
   p: number = 1;
   itemsPerPage: number = 5;
-  list: any[] = [];
+  
+  list: Post[] = [];
   selectedEditFiles: File[] = [];
+  post: Post = {
+    title: '',
+    content: '',
+    images: []
+  };
   successMessage: string | null = null;
   errorMessage: string | null = null;
-  postToDelete: any = null;
-  postToEdit: any = null;
+  postToDelete: any | null = null;
+  postToEdit: any | null = null;
   deleteModalInstance: any;
   isEditing: boolean = false;
   private alertTimeout: any;
+  imagePreview: string | ArrayBuffer | null = null;
 
-  constructor(private postService: PostsService, private http: HttpClient) {}
+  constructor(private postService: PostsService) {}
 
   ngOnInit() {
     this.loadPosts();
   }
 
-  // Cargar los posts desde el servicio
   loadPosts() {
-    this.postService.getPosts().subscribe({
-      next: (data) => {
-        this.list = data; // Asignamos la respuesta al listado de posts
-        // Si no hay posts, mostramos un mensaje de éxito
-        if (this.list.length === 0) {
-          this.successMessage = 'No hay posts disponibles para mostrar.';
-        } else {
-          this.successMessage = null; // Limpiamos el mensaje si hay posts
-        }
+    this.clearAlerts();
+    this.postService.getAllPosts().subscribe({
+      next: (data: any) => {
+        this.list = data;
       },
       error: (error) => {
+        console.error('Error loading post', error);
         this.errorMessage = 'Error al cargar los posts';
-        console.error('Error:', error);
+        this.setAlertTimeout('error');
       }
     });
   }
 
-  // Preparar para editar un post
   prepareEdit(post: any) {
+    this.postToEdit = { ...post };
     this.isEditing = true;
-    this.postToEdit = { ...post }; // Hacemos una copia del post
-    this.selectedEditFiles = []; // Limpiamos los archivos seleccionados para edición
+    console.log('Imagen previa:', this.postToEdit);
   }
 
-  // Cancelar la edición
   cancelEdit() {
     this.isEditing = false;
     this.postToEdit = null;
-    this.selectedEditFiles = [];
   }
+onImageChange(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  
+  if (input.files && input.files.length > 0 && this.postToEdit?.id !== undefined) {
+    const imageFile = input.files[0];
+    this.postToEdit.image = imageFile;
+    console.log('Imagen seleccionada:', this.postToEdit.image);
+    const reader = new FileReader();
 
-  // Función para actualizar el post
+    reader.onload = () => {
+      this.imagePreview = reader.result;
+      console.log('Vista previa cargada:', this.imagePreview);
+    };
+
+    reader.readAsDataURL(imageFile);
+  }
+}
   updatePost() {
-  if (!this.postToEdit.title || !this.postToEdit.content) {
-    this.errorMessage = 'El título y el contenido son obligatorios.';
-    return;
-  }
-
-
-  this.postService.updatePost(this.postToEdit.id, this.postToEdit).subscribe({
-    next: (response) => {
-      this.successMessage = 'Post actualizado con éxito';
-      console.log('Post actualizado:', this.postToEdit);
-      this.loadPosts(); // Recargar lista
-      this.cancelEdit(); // Salir del modo edición
-    },
-    error: (error) => {
-      this.errorMessage = 'Hubo un error al actualizar el post.';
-      console.error('Error:', error);
-    }
-  });
-}
-
-  // Función para manejar la selección de archivos
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.postToEdit.image = file; // Asignamos la imagen al objeto post
-    }
-  }
-
-  // Función para preparar el borrado de un post
-  prepareDelete(product: any) {
-  this.postToDelete = product;
-  const modal = document.getElementById('deleteModal');
-  if (modal) {
-    // @ts-ignore
-    this.deleteModalInstance = new bootstrap.Modal(modal);
-    this.deleteModalInstance.show();
-  }
-}
-
-  // Confirmar el borrado de un post
-  confirmDelete() {
-    if (this.postToDelete) {
-      this.postService.deletePost(this.postToDelete.id).subscribe({
+    if (this.postToEdit && this.postToEdit.id !== undefined) {
+      this.clearAlerts();
+      this.postService.updatePost(this.postToEdit.id, this.postToEdit).subscribe({
         next: (response) => {
-          this.successMessage = 'Post eliminado con éxito';
-          console.log('Post eliminado:', this.postToDelete);
-          this.loadPosts(); // Recargar lista
-          this.postToDelete = null; // Limpiar post a eliminar
-
-           if (this.deleteModalInstance) {
-          this.deleteModalInstance.hide();
-        }
+          this.successMessage = 'Producto actualizado exitosamente';
+          this.setAlertTimeout('success');
+          this.postService.updateImages(this.postToEdit.id, this.postToEdit.image).subscribe({
+            next: (response) => {
+              this.successMessage = 'Imagen subida exitosamente';
+              this.setAlertTimeout('success');
+              this.loadPosts();
+            },
+            error: (error) => {
+              console.error('Error uploading image', error);
+              this.errorMessage = 'Error al subir la imagen';
+              this.setAlertTimeout('error');
+            }
+          });
+          this.loadPosts();
+          this.isEditing = false;
         },
         error: (error) => {
-          this.errorMessage = 'Hubo un error al eliminar el post.';
-          console.error('Error:', error);
+          console.error('Error updating product', error);
+          this.errorMessage = 'Error al actualizar el producto';
+          this.setAlertTimeout('error');
+        }
+      });
+    }else {
+      this.errorMessage = 'No se pudo actualizar el producto, ID no válido';
+      this.setAlertTimeout('error');
+    }
+  }
+
+
+
+  prepareDelete(post: Post) {
+    this.postToDelete = post;
+    const modal = document.getElementById('deleteModal');
+    if (modal) {
+      // @ts-ignore
+      this.deleteModalInstance = new bootstrap.Modal(modal);
+      this.deleteModalInstance.show();
+    }
+  }
+
+  confirmDelete() {
+    if (this.postToDelete && this.postToDelete.id !== undefined) {
+      this.clearAlerts();
+      this.postService.deletePost(this.postToDelete.id).subscribe({
+        next: (response) => {
+          this.successMessage = 'Post eliminado exitosamente';
+          this.setAlertTimeout('success');
+          this.loadPosts();
+          if (this.deleteModalInstance) {
+            this.deleteModalInstance.hide();
+          }
+        },
+        error: (error) => {
+          console.error('Error deleting post', error);
+          this.errorMessage = 'Error al eliminar el post';
+          this.setAlertTimeout('error');
         }
       });
     }
   }
 
-  // Función para cerrar las alertas de error o éxito
   dismissAlert(type: 'success' | 'error') {
     if (type === 'success') {
       this.successMessage = null;
@@ -144,8 +161,12 @@ export class ListPostComponent {
   }
 
   private clearAlerts() {
-    this.errorMessage = null;
     this.successMessage = null;
+    this.errorMessage = null;
     clearTimeout(this.alertTimeout);
   }
-}
+
+  
+
+  }
+
