@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://capsvillebackend.onrender.com'
+  apiUrl: 'https://capsvillebackend.onrender.com/api'
 };
