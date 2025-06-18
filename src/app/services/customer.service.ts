@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ export class CustomerService {
   private headers = new HttpHeaders({
     'Authorization': `Bearer ${localStorage.getItem('token')}`
   });
-  private apiUrl = 'http://localhost:8000/api/customers';
+  private apiUrl = `${environment.apiUrl}/api/customers`;
 
   constructor(private http: HttpClient) { }
 

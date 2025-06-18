@@ -21,7 +21,7 @@ export class LoginComponent {
       password: this.password
     };
 
-    this.http.post<any>('http://localhost:8000/api/login', credentials).subscribe({
+    this.http.post<any>('${environment.apiUrl}/api/login', credentials).subscribe({
       next: (response) => {
         localStorage.setItem('userId', response.user.id);
         // Guardar el token (opcional: en localStorage o service)
