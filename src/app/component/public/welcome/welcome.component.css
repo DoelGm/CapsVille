@@ -44,3 +44,35 @@
     height: 65vh;
   }
 }
+
+/* Imagen móvil con fondo oscuro */
+.mobile-banner {
+  background-color: #1A1A1A;
+  height: 50vh; /* Igual que el carrusel en móviles */
+  display: none;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Imagen ajustada al centro, pero más abajo */
+.mobile-image {
+  position: absolute;
+  top: 60%; /* Un poco más abajo del centro */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Mostrar imagen en móvil */
+@media (max-width: 720px) {
+  .mobile-banner {
+    display: block;
+  }
+
+  .desktop-carousel {
+    display: none;
+  }
+}

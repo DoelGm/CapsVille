@@ -4,39 +4,87 @@
   color: white;
 }
 
-/* Para ajustar imagen responsiva si es necesario */
+/* Estilo para el botón personalizado */
+.btn-custom {
+  background-color: white;
+  color: #D60018;
+  padding: 12px 30px;
+  font-weight: 600;
+  border-radius: 30px;
+  border: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.text-container h2 {
+  padding-block: 2%;
+}
+
+.btn-custom:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  background-color: #f8f9fa;
+}
+
+/* Imagen */
 .image-side img {
   max-width: 100%;
   height: auto;
   border-radius: 10px;
 }
 
-/* Ajustes para móviles (menos de 768px) */
+/* RESPONSIVE */
 @media (max-width: 767px) {
   .custom-section {
-    height: auto !important; /* Que crezca con el contenido */
+    height: auto !important;
     padding: 20px 10px;
   }
 
+  .row {
+    flex-direction: column-reverse;
+  }
+  .bg-custom {
+    background-color: transparent; /* quita el rojo de la columna */
+  }
+
+  /* Fondo rojo y redondeado solo en móvil */
   .text-container {
-    width: 100%;
-    padding: 10px;
+    background-color: #D60018;
+    color: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 10px auto;
+    width: 100% !important;
   }
 
   .text-container h2 {
-    font-size: 1.5rem;
-    margin: 1rem 0;
-    padding: 0;
-    text-align: center;
-  }
+  font-size: 1.6rem;
+  margin: 1rem 0;
+  padding: 0.5rem 0;
+  line-height: 1.3;
+}
+
+.text-container h2.fs-1 {
+  font-size: 1.6rem !important; /* sobrescribe el fs-1 de Bootstrap */
+}
 
   .text-container p {
     font-size: 1rem;
     text-align: justify;
+    margin-bottom: 1.5rem !important;
   }
 
-  /* Opcional: si deseas que la imagen se muestre primero en móviles */
-  .row {
-    flex-direction: column-reverse;
+  .btn-custom {
+    padding: 10px 25px;
+    font-size: 0.9rem;
+  }
+
+  .image-side {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .image-side img {
+    max-width: 90%;
+    border-radius: 15px;
   }
 }
