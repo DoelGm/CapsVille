@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Post {
   id?: number;
@@ -15,7 +16,8 @@ export interface Post {
 })
 export class PostsService {
 
-  private apiUrl = 'http://localhost:8000/api/posts';
+  private apiUrl = `${environment.apiUrl}posts`;
+
 
   constructor(private http: HttpClient) {}
 
