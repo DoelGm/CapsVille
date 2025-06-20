@@ -23,7 +23,7 @@
 
         <!-- Tabla de productos -->
         <div *ngIf="!isEditing && !isLoading" class="table-responsive rounded mb-3">
-          <table class="table table-hover align-middle mb-0 bg-white rounded table-sm">
+          <table class="table table-hover align-middle mb-3 bg-white rounded table-sm">
             <thead class="table-secondary text-center text-secondary">
               <tr>
                 <th>#</th>
@@ -63,7 +63,7 @@
 
           <pagination-controls
             (pageChange)="p = $event"
-            class="my-pagination text-center mt-3"
+            class="text-center"
             previousLabel="Anterior"
             nextLabel="Siguiente">
           </pagination-controls>
