@@ -186,41 +186,64 @@ for (const item of this.ticketItems) {
 
 
   generatePDF() {
-    const content = this.pdfContent.nativeElement;
-    html2canvas(content).then(canvas => {
-      const imageData = canvas.toDataURL('image/png');
-      const doc = new jsPDF();
-      const imgWidth = 210;
-      const imgHeight = canvas.height * imgWidth / canvas.width;
-
-      doc.addImage(imageData, 'PNG', 0, 0, imgWidth, imgHeight);
-      doc.save('ticket_resumen.pdf');
-      
-    });
-  }
-
- generateImage() {
-  console.log('📸 Generando imagen PNG...');
   const content = this.pdfContent.nativeElement;
 
-  const targetWidth = 718;   // ancho deseado
-  const targetHeight = 900; // alto deseado (ajustado a proporción A4 vertical)
+  const isMobile = window.innerWidth <= 768;
+  const scale = isMobile ? 2 : 3;
 
   html2canvas(content, {
-    width: content.scrollWidth,
-    height: content.scrollHeight,
-    scale: 4,
+    scale: scale,
     useCORS: true
   }).then(canvas => {
-    // Crear un canvas nuevo ajustado al tamaño deseado
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'mm', 'a4');
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+
+    const imgWidth = pdfWidth;
+    const imgHeight = canvas.height * pdfWidth / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    heightLeft -= pdfHeight;
+
+    while (heightLeft > 0) {
+      position = position - pdfHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pdfHeight;
+    }
+
+    pdf.save('ticket_resumen.pdf');
+  });
+}
+
+
+
+ generateImage() {
+  const content = this.pdfContent.nativeElement;
+
+  const isMobile = window.innerWidth <= 768;
+  const scale = isMobile ? 2 : 4;
+  const width = content.scrollWidth;
+  const height = content.scrollHeight;
+
+  html2canvas(content, {
+    width,
+    height,
+    scale,
+    useCORS: true
+  }).then(canvas => {
     const resizedCanvas = document.createElement('canvas');
-    resizedCanvas.width = targetWidth;
-    resizedCanvas.height = targetHeight;
+    resizedCanvas.width = width;
+    resizedCanvas.height = height;
 
     const ctx = resizedCanvas.getContext('2d');
     if (ctx) {
-      ctx.drawImage(canvas, 0, 0, targetWidth, targetHeight);
-
+      ctx.drawImage(canvas, 0, 0, width, height);
       const imageData = resizedCanvas.toDataURL('image/png');
 
       const link = document.createElement('a');
@@ -232,6 +255,7 @@ for (const item of this.ticketItems) {
     }
   });
 }
+
 
 
 

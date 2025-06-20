@@ -71,103 +71,125 @@
                 </div>
         </div>
     </section>
-
-    <section class="d-md-none text-start bg-dark viewMobile p-3 shadow">
-        <!-- Botón hamburguesa visible solo en móviles -->
-         <div class="row align-items-center">
-            <div class="col-4 text-bg-dark text-start">
-                 <button class="btn btn-outline-danger d-md-none mb-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
-                    ☰
-                </button>
-            </div>
-            <div class="col-4 text-bg-dark text-center">
-               <img src="/imgs/CAPSVILLAGE-11.png" width="70" height="50" alt="">
-            </div>
-            <div class="col-4 text-bg-dark text-end">
-                <p>Usuario</p>
-            </div>
-         </div>
-           
-            <!-- Sidebar tipo offcanvas solo en móviles -->
-            <div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="mobileSidebarLabel">Navegación</h5>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
-            </div>
-            <div class="offcanvas-body">
-                <div class="accordion accordion-flush" id="mobileAdminSidebar">
-                <!-- Menús como en versión PC -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mmenu1">
-                        Gestión de Productos
-                    </button>
-                    </h2>
-                    <div id="mmenu1" class="accordion-collapse collapse" data-bs-parent="#mobileAdminSidebar">
-                    <div class="accordion-body">
-                        <a href="/admin/product-list" class="d-block mobile-link">Lista de productos</a>
-                        <a href="/admin/new-product" class="d-block mobile-link">Agregar producto</a>
-                    </div>
-                    </div>
-                </div>
-
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mmenu2">
-                        Usuarios
-                    </button>
-                    </h2>
-                    <div id="mmenu2" class="accordion-collapse collapse" data-bs-parent="#mobileAdminSidebar">
-                    <div class="accordion-body">
-                        <a href="/admin/user-list" class="d-block mobile-link">Lista de usuarios</a>
-                        <a href="/admin/customer-list" class="d-block mobile-link">Lista de clientes</a>
-                        <a href="/admin/new-customer" class="d-block mobile-link">Nuevo Cliente</a>
-                        <a href="/admin/new-user" class="d-block mobile-link">Nuevo Usuario</a>
-                    </div>
-                    </div>
-                </div>
-
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mmenu3">
-                        Posts
-                    </button>
-                    </h2>
-                    <div id="mmenu3" class="accordion-collapse collapse" data-bs-parent="#mobileAdminSidebar">
-                    <div class="accordion-body">
-                        <a href="/admin/new-post" class="d-block mobile-link">Nuevo Post</a>
-                        <a href="/admin/list-post" class="d-block mobile-link">Lista de posts</a>
-                    </div>
-                    </div>
-                </div>
-
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mmenu4">
-                        Tickets
-                    </button>
-                    </h2>
-                    <div id="mmenu4" class="accordion-collapse collapse" data-bs-parent="#mobileAdminSidebar">
-                    <div class="accordion-body">
-                        <a href="/admin/new-ticket" class="d-block mobile-link">Nuevos Tikets</a>
-                    </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-        </div>
-    </section>
+                            <!-- VISTA MÓVIL -->
+                    <section class="d-md-none text-start bg-dark viewMobile p-3 shadow">
+                    <div class="row align-items-center">
+                        <div class="col-4 text-start">
+                        <button class="btn btn-outline-danger d-md-none mb-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
+                            ☰
+                        </button>
+                        </div>
+                        <div class="col-4 text-center">
+                        <img src="/imgs/CAPSVILLAGE-11.png" width="70" height="50" alt="">
+                        </div>
+                        <div class="col-4 text-end dropdown">
+<a
+  href="#"
+  role="button"
+  id="userDropdownMobile"
+  data-bs-toggle="dropdown"
+  aria-expanded="false"
+  class="dropdown-toggle text-white bg-transparent border-0 p-0"
+  style="box-shadow: none;"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+    class="bi bi-person-circle" viewBox="0 0 16 16">
+    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+    <path fill-rule="evenodd"
+      d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 
+      4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+  </svg>
+</a>
 
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const links = document.querySelectorAll(".mobile-link");
-    const sidebar = document.getElementById("mobileSidebar");
-    links.forEach(link => {
-      link.addEventListener("click", () => {
-        const offcanvas = bootstrap.Offcanvas.getInstance(sidebar);
-        if (offcanvas) offcanvas.hide();
-      });
-    });
-  });
-</script>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdownMobile">
+                            <li><button (click)="logout()" class="dropdown-item">Cerrar sesión</button></li>
+                        </ul>
+                        </div>
+                    </div>
+
+                    <!-- Offcanvas para menú móvil -->
+                    <div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
+                        <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="mobileSidebarLabel">Navegación</h5>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                        <div class="accordion accordion-flush" id="mobileAdminSidebar">
+                            <!-- Gestión de productos -->
+                            <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mmenu1">
+                                Gestión de Productos
+                                </button>
+                            </h2>
+                            <div id="mmenu1" class="accordion-collapse collapse" data-bs-parent="#mobileAdminSidebar">
+                                <div class="accordion-body">
+                                <a href="/admin/product-list" class="d-block mobile-link">Lista de productos</a>
+                                <a href="/admin/new-product" class="d-block mobile-link">Agregar producto</a>
+                                </div>
+                            </div>
+                            </div>
+
+                            <!-- Usuarios -->
+                            <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mmenu2">
+                                Usuarios
+                                </button>
+                            </h2>
+                            <div id="mmenu2" class="accordion-collapse collapse" data-bs-parent="#mobileAdminSidebar">
+                                <div class="accordion-body">
+                                <a href="/admin/user-list" class="d-block mobile-link">Lista de usuarios</a>
+                                <a href="/admin/customer-list" class="d-block mobile-link">Lista de clientes</a>
+                                <a href="/admin/new-customer" class="d-block mobile-link">Nuevo Cliente</a>
+                                <a href="/admin/new-user" class="d-block mobile-link">Nuevo Usuario</a>
+                                </div>
+                            </div>
+                            </div>
+
+                            <!-- Posts -->
+                            <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mmenu3">
+                                Posts
+                                </button>
+                            </h2>
+                            <div id="mmenu3" class="accordion-collapse collapse" data-bs-parent="#mobileAdminSidebar">
+                                <div class="accordion-body">
+                                <a href="/admin/new-post" class="d-block mobile-link">Nuevo Post</a>
+                                <a href="/admin/list-post" class="d-block mobile-link">Lista de posts</a>
+                                </div>
+                            </div>
+                            </div>
+
+                            <!-- Tickets -->
+                            <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mmenu4">
+                                Tickets
+                                </button>
+                            </h2>
+                            <div id="mmenu4" class="accordion-collapse collapse" data-bs-parent="#mobileAdminSidebar">
+                                <div class="accordion-body">
+                                <a href="/admin/new-ticket" class="d-block mobile-link">Nuevos Tikets</a>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    </section>
+
+                    <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const links = document.querySelectorAll(".mobile-link");
+                        const sidebar = document.getElementById("mobileSidebar");
+                        links.forEach(link => {
+                        link.addEventListener("click", () => {
+                            const offcanvas = bootstrap.Offcanvas.getInstance(sidebar);
+                            if (offcanvas) offcanvas.hide();
+                        });
+                        });
+                    });
+                    </script>

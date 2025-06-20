@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { UserService } from '../../../services/user.service';
+import { LogoutService } from '../../../services/logout.service';
+
 
 @Component({
   selector: 'app-navbar-admin',
@@ -11,7 +13,7 @@ export class NavbarAdminComponent {
 
   user: any = {};
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private logoutService: LogoutService) { }
 
   // En tu componente
 ngOnInit() {
@@ -30,5 +32,24 @@ ngOnInit() {
   }
 }
 
+logout() {
+  this.logoutService.logoutUser().subscribe({
+    next: (res) => {
+      console.log('Sesión cerrada', res);
+      localStorage.removeItem('userId');
+      localStorage.removeItem('token');
+      sessionStorage.clear();
+      this.logoutService.redirectToLogin();
+    },
+    error: (err) => {
+      console.error('Error al cerrar sesión:', err);
+      // Aun si hay error, limpiar y redirigir por si el token ya expiró
+      localStorage.removeItem('userId');
+      localStorage.removeItem('token');
+      sessionStorage.clear();
+      this.logoutService.redirectToLogin();
+    }
+  });
+}
 
 }

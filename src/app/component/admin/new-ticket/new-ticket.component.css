@@ -1,0 +1,15 @@
+#print-area, .pdf-content {
+  background: white;
+  width: 794px; /* A4 width at 96dpi */
+  min-height: 1123px; /* A4 height at 96dpi */
+  padding: 20px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .pdf-content {
+    transform: scale(0.9);
+    transform-origin: top left;
+  }
+}
