@@ -14,6 +14,9 @@ import { of } from 'rxjs';
   styleUrls: ['./custumer-table.component.css']
 })
 export class CustumerTableComponent {
+
+   isLoading: boolean = true;
+
   // Lista de clientes y configuración de paginación
   customers: any[] = [];
   p: number = 1;
@@ -44,12 +47,14 @@ export class CustumerTableComponent {
     this.clearAlerts();
     this.customerService.getCustomers().pipe(
       catchError(error => {
+        this.isLoading = false;
         console.error('Error loading customers:', error);
         this.showError('Error al cargar los clientes');
         return of([]); // Retorna un array vacío en caso de error
       })
     ).subscribe({
       next: (data: any) => {
+        this.isLoading = false;
         this.customers = Array.isArray(data) ? data : [data];
         this.showSuccess('Clientes cargados exitosamente');
       }

@@ -2,17 +2,25 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12 p-4 bg-light rounded shadow">
-        <h1 class="text-start mb-4">Lista de Usuarios</h1>
-        
+        <h1 *ngIf="!isEditing" class="text-start mb-4">Lista de Usuarios</h1>
+
+          <!-- Cargando -->
+         <div *ngIf="isLoading"  class="text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-3">Cargando Usuarios...</p>
+          </div>
+
         <!-- Alertas -->
 
         <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
           {{ errorMessage }}
           <button type="button" class="btn-close" (click)="dismissAlert('error')" aria-label="Close"></button>
-        </div> 
+        </div>
 
         <!-- Vista de tabla -->
-        <div *ngIf="!isEditing" class="table-responsive rounded mb-3">
+        <div *ngIf="!isEditing && !isLoading" class="table-responsive rounded mb-3">
           <table class="table table-hover  align-middle mb-0 bg-white rounded">
             <thead class="table-secondary text-center">
               <tr>
@@ -54,24 +62,24 @@
         <!-- Formulario de edición -->
         <div *ngIf="isEditing" class="mt-4 p-4 bg-light rounded">
           <h2>Editar Usuario</h2>
-          
+
           <form #editForm="ngForm" (ngSubmit)="updateUser()">
             <div class="mb-4">
               <label for="editName" class="form-label">Nombre completo</label>
               <input type="text" class="form-control" [(ngModel)]="userToEdit.name" id="editName" name="name" required>
             </div>
-            
+
             <div class="mb-4">
               <label for="editEmail" class="form-label">Correo electrónico</label>
               <input type="email" class="form-control" [(ngModel)]="userToEdit.email" id="editEmail" name="email" required>
             </div>
-            
+
             <div class="mb-4">
               <label for="editPassword" class="form-label">Nueva contraseña (dejar vacío para no cambiar)</label>
               <input type="password" class="form-control" minlength="8" [(ngModel)]="newPassword" id="editPassword" name="password">
               <small class="text-muted">Mínimo 8 caracteres</small>
             </div>
-            
+
             <div class="mb-4" *ngIf="newPassword">
               <label for="editConfirmPassword" class="form-label">Confirmar nueva contraseña</label>
               <input type="password" class="form-control" minlength="8" [(ngModel)]="confirmPassword" id="editConfirmPassword" name="confirmPassword">

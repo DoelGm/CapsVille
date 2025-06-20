@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 export class UsersTableComponent {
   // Propiedades del componente
   users: any[] = [];
+   isLoading: boolean = true;
   userToEdit: any = null;
   userToDelete: any = null;
   newPassword: string = '';
@@ -35,11 +36,13 @@ export class UsersTableComponent {
     this.clearAlerts();
     this.userService.getAllUsers().subscribe({
       next: (data) => {
+        this.isLoading = false;
         this.users = data;
         this.successMessage = 'Usuarios cargados exitosamente';
         this.setAlertTimeout('success');
       },
       error: (error) => {
+        this.isLoading = false;
         console.error('Error loading users', error);
         this.errorMessage = 'Error al cargar los usuarios';
         this.setAlertTimeout('error');
@@ -64,7 +67,7 @@ export class UsersTableComponent {
   updateUser() {
     if (this.userToEdit) {
       this.clearAlerts();
-      
+
       // Validación de contraseñas
       if (this.newPassword && this.newPassword !== this.confirmPassword) {
         this.errorMessage = 'Las contraseñas no coinciden';
