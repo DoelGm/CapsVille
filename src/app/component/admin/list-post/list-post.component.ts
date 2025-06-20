@@ -14,7 +14,7 @@ import { PostsService, Post } from '../../../services/post.service';
 export class ListPostComponent implements OnInit {
   p: number = 1;
   itemsPerPage: number = 5;
-  
+  isLoading: boolean = true;
   list: Post[] = [];
   selectedEditFiles: File[] = [];
   post: Post = {
@@ -41,9 +41,11 @@ export class ListPostComponent implements OnInit {
     this.clearAlerts();
     this.postService.getAllPosts().subscribe({
       next: (data: any) => {
+        this.isLoading = false;
         this.list = data;
       },
       error: (error) => {
+        this.isLoading = false;
         console.error('Error loading post', error);
         this.errorMessage = 'Error al cargar los posts';
         this.setAlertTimeout('error');
@@ -63,7 +65,7 @@ export class ListPostComponent implements OnInit {
   }
 onImageChange(event: Event): void {
   const input = event.target as HTMLInputElement;
-  
+
   if (input.files && input.files.length > 0 && this.postToEdit?.id !== undefined) {
     const imageFile = input.files[0];
     this.postToEdit.image = imageFile;
@@ -166,7 +168,7 @@ onImageChange(event: Event): void {
     clearTimeout(this.alertTimeout);
   }
 
-  
+
 
   }
 

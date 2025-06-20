@@ -2,8 +2,16 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12 p-4 bg-light rounded shadow">
-        <h1>Lista de Clientes</h1>
-        
+        <h1 *ngIf="!isEditing">Lista de Clientes</h1>
+
+         <!-- Cargando -->
+         <div *ngIf="isLoading"  class="text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-3">Cargando clientes...</p>
+          </div>
+
         <!-- Alertas -->
         <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
           {{ errorMessage }}
@@ -11,7 +19,7 @@
         </div>
 
         <!-- Vista de tabla -->
-        <div *ngIf="!isEditing" class="table-responsive text-center rounded mb-3">
+        <div *ngIf="!isEditing && !isLoading" class="table-responsive text-center rounded mb-3">
           <table class="table table-hover align-middle mb-0 bg-white rounded">
             <thead class="table-secondary">
               <tr>
@@ -54,26 +62,26 @@
         <!-- Formulario de edición -->
         <div *ngIf="isEditing" class="mt-4 p-4 bg-light rounded">
           <h2>Editar Cliente: {{customerToEdit.name}}</h2>
-          
+
           <form #editForm="ngForm" (ngSubmit)="updateCustomer()">
             <div class="mb-4">
               <label for="editName" class="form-label">Nombre completo</label>
-              <input type="text" class="form-control" id="editName" 
+              <input type="text" class="form-control" id="editName"
                      [(ngModel)]="customerToEdit.name" name="name" required>
             </div>
-            
+
             <div class="mb-4">
               <label for="editPhone" class="form-label">Número de teléfono</label>
-              <input type="tel" class="form-control" minlength="10" id="editPhone" 
+              <input type="tel" class="form-control" minlength="10" id="editPhone"
                      [(ngModel)]="customerToEdit.phone" name="phone" required>
             </div>
-            
+
             <div class="mb-4">
               <label for="editEmail" class="form-label">Correo electrónico</label>
-              <input type="email" class="form-control" id="editEmail" 
+              <input type="email" class="form-control" id="editEmail"
                      [(ngModel)]="customerToEdit.email" name="email" required>
             </div>
-            
+
             <div class="d-flex gap-2">
               <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">
                 <i class="fas fa-save me-1"></i> Guardar Cambios
