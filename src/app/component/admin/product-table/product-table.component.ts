@@ -20,6 +20,7 @@ export class ProductTableComponent {
   p: number = 1;
   itemsPerPage: number = 10;
   products: any[] = [];
+  isLoading: boolean = true;
   categories: any[] = [];
   productToEdit: any = null;
   productToDelete: any = null;
@@ -42,10 +43,13 @@ export class ProductTableComponent {
     this.clearAlerts();
     this.productService.getAllProducts().subscribe({
       next: (data: any) => {
+        this.isLoading = false;
         this.products = data;
-  
+
+
       },
       error: (error) => {
+        this.isLoading = false;
         console.error('Error loading products', error);
         this.errorMessage = 'Error al cargar los productos';
         this.setAlertTimeout('error');

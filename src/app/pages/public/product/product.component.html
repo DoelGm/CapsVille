@@ -21,7 +21,7 @@
                         *ngFor="let img of product.images; let i = index"
                         class="carousel-item"
                         [class.active]="i === 0">
-                        <img [src]="img.cloudinary_url" class="d-block w-100 img-fluid" alt="Imagen del producto {{product.id}}">
+                        <img [src]="img.cloudinary_url || '/imgs/default.jpg'" class="d-block w-100 img-fluid" alt="Imagen del producto {{product.id}}">
                       </div>
                     </div>
 
